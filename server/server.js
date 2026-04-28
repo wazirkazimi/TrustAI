@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const rateLimit = require('express-rate-limit');
@@ -28,7 +27,28 @@ app.use('/api/report', require('./routes/report'));
 app.use('/api/user',   require('./routes/user'));
 
 // Health check
-app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
+// Health check with Supabase verification
+app.get('/api/health', async (req, res) => {
+  try {
+    const supabase = require('./config/supabase');
+    const { error } = await supabase.from('users').select('count', { count: 'exact', head: true });
+    
+    if (error) throw error;
+    
+    res.json({ 
+      status: 'ok', 
+      database: 'connected',
+      timestamp: new Date().toISOString() 
+    });
+  } catch (err) {
+    res.status(503).json({ 
+      status: 'error', 
+      database: 'disconnected',
+      message: err.message,
+      timestamp: new Date().toISOString() 
+    });
+  }
+});
 
 // 404 handler
 app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
@@ -39,17 +59,9 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ message: err.message || 'Internal Server Error' });
 });
 
-// ─── Database + Start ────────────────────────────────────────────────────────
-const PORT      = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/foodtrust';
+const PORT = process.env.PORT || 5000;
 
-mongoose
-  .connect(MONGO_URI)
-  .then(() => {
-    console.log('✅  MongoDB connected');
-    app.listen(PORT, () => console.log(`🚀  Server running on http://localhost:${PORT}`));
-  })
-  .catch((err) => {
-    console.error('❌  MongoDB connection failed:', err.message);
-    process.exit(1);
-  });
+app.listen(PORT, () => {
+  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log('🚀 Connected to Supabase via Service Client');
+});

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { authAPI, userAPI } from '../utils/api';
 import { ChevronRight, ScanLine, BookmarkIcon, AlertTriangle, LogOut, Heart, Zap, Loader2 } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
 
@@ -22,20 +22,12 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          navigate('/login');
-          return;
-        }
-        const res = await axios.get('http://localhost:5000/api/auth/me', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setUser(res.data);
-        setActiveMode(res.data.healthMode || 'default');
-        setIsVeg(res.data.vegFilter || false);
+        const { data } = await authAPI.getMe();
+        setUser(data);
+        setActiveMode(data.healthMode || 'default');
+        setIsVeg(data.vegFilter || false);
       } catch (err) {
         console.error('Profile fetch error:', err);
-        localStorage.removeItem('token');
         navigate('/login');
       } finally {
         setLoading(false);
@@ -48,10 +40,7 @@ const Profile = () => {
     setActiveMode(modeId);
     setUpdating(true);
     try {
-      const token = localStorage.getItem('token');
-      await axios.put('http://localhost:5000/api/user/mode', { healthMode: modeId }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await userAPI.updateHealthMode(modeId);
     } catch (err) {
       console.error('Update mode error:', err);
     } finally {
@@ -64,10 +53,7 @@ const Profile = () => {
     setIsVeg(newVal);
     setUpdating(true);
     try {
-      const token = localStorage.getItem('token');
-      await axios.put('http://localhost:5000/api/user/veg', { vegFilter: newVal }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await userAPI.updateVeg(newVal);
     } catch (err) {
       console.error('Update veg error:', err);
     } finally {
@@ -76,7 +62,8 @@ const Profile = () => {
   };
 
   const handleSignOut = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('foodtrust_token');
+    localStorage.removeItem('foodtrust_user');
     navigate('/');
   };
 
@@ -105,7 +92,7 @@ const Profile = () => {
         <div className="grid grid-cols-3 gap-3 mt-8">
           {[
             { label: 'Total Scans', value: '24' },
-            { label: 'Saved', value: user?.bookmarks?.length || 0 },
+            { label: 'Saved', value: user?.bookmarksCount || 0 },
             { label: 'Reports', value: '2' },
           ].map((s, i) => (
             <div key={i} className="bg-purple-50/50 rounded-[1.5rem] py-4 px-3 text-center border border-purple-100/50">

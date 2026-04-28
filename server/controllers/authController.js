@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const bcrypt = require('bcryptjs');
+const supabase = require('../config/supabase');
 
 const generateToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
@@ -7,22 +8,49 @@ const generateToken = (id) =>
 // POST /api/auth/register
 exports.register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, age, goal, gradingSystem, isVegan } = req.body;
     if (!name || !email || !password)
       return res.status(400).json({ message: 'All fields are required' });
 
-    if (await User.findOne({ email }))
+    // Check if user exists
+    const { data: existingUser } = await supabase
+      .from('users')
+      .select('id')
+      .eq('email', email.toLowerCase())
+      .single();
+
+    if (existingUser)
       return res.status(400).json({ message: 'Email already registered' });
 
-    const user = await User.create({ name, email, password });
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    // Create user
+    const { data: user, error } = await supabase
+      .from('users')
+      .insert([
+        { 
+          name, 
+          email: email.toLowerCase(), 
+          password: hashedPassword,
+          age: parseInt(age) || null,
+          goal: goal || 'Balanced',
+          grading_system: gradingSystem || 'FoodTrust (AI)',
+          veg_filter: isVegan === 'Yes'
+        }
+      ])
+      .select()
+      .single();
+
+    if (error) throw error;
 
     res.status(201).json({
-      _id: user._id,
+      id: user.id,
       name: user.name,
       email: user.email,
-      healthMode: user.healthMode,
-      vegFilter: user.vegFilter,
-      token: generateToken(user._id),
+      healthMode: user.health_mode,
+      vegFilter: user.veg_filter,
+      token: generateToken(user.id),
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -36,17 +64,26 @@ exports.login = async (req, res) => {
     if (!email || !password)
       return res.status(400).json({ message: 'Email and password are required' });
 
-    const user = await User.findOne({ email });
-    if (!user || !(await user.matchPassword(password)))
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', email.toLowerCase())
+      .single();
+
+    if (error || !user)
+      return res.status(401).json({ message: 'Invalid credentials' });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch)
       return res.status(401).json({ message: 'Invalid credentials' });
 
     res.json({
-      _id: user._id,
+      id: user.id,
       name: user.name,
       email: user.email,
-      healthMode: user.healthMode,
-      vegFilter: user.vegFilter,
-      token: generateToken(user._id),
+      healthMode: user.health_mode,
+      vegFilter: user.veg_filter,
+      token: generateToken(user.id),
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -56,9 +93,28 @@ exports.login = async (req, res) => {
 // GET /api/auth/me
 exports.getMe = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    res.json(user);
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('id, name, email, health_mode, veg_filter')
+      .eq('id', req.user.id)
+      .single();
+
+    if (error || !user) return res.status(404).json({ message: 'User not found' });
+
+    // Get bookmark count
+    const { count: bookmarksCount } = await supabase
+      .from('bookmarks')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', req.user.id);
+    
+    res.json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      healthMode: user.health_mode,
+      vegFilter: user.veg_filter,
+      bookmarksCount: bookmarksCount || 0
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

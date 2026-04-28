@@ -56,21 +56,21 @@ async function searchProductsByName(query, page = 1) {
         json: 1,
         page_size: 20,
         page,
-        tagtype_0: 'countries',
-        tag_contains_0: 'contains',
-        tag_0: 'india',
+        fields: 'code,product_name,product_name_en,brands,image_url,image_small_url,labels,ingredients_text,categories,additives_tags',
       },
       timeout: 10000,
     });
 
-    const products = (res.data.products || []).map(p => ({
-      barcode: p.code,
-      productName: p.product_name || p.product_name_en || 'Unknown Product',
-      brand: p.brands || '',
-      imageUrl: p.image_url || p.image_small_url || '',
-      categories: p.categories || '',
-      vegStatus: detectVegStatus(p),
-    }));
+    const products = (res.data.products || [])
+      .filter(p => p.product_name || p.product_name_en)
+      .map(p => ({
+        barcode: p.code,
+        productName: p.product_name || p.product_name_en || 'Unknown Product',
+        brand: p.brands || '',
+        imageUrl: p.image_small_url || p.image_url || '',
+        categories: p.categories || '',
+        vegStatus: detectVegStatus(p),
+      }));
 
     return { products, count: res.data.count || 0 };
   } catch (err) {

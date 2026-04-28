@@ -31,7 +31,11 @@ async function extractTextFromImage(base64Image) {
 
     return { rawText, fssaiNumber, nutritionRaw };
   } catch (err) {
-    console.error('Google Vision API error:', err.message);
+    if (err.response?.status === 403) {
+      console.error('❌ Google Vision API: Access denied. Please ensure Billing is enabled in your Google Cloud Console.');
+    } else {
+      console.error('Google Vision API error:', err.message);
+    }
     return { rawText: '', fssaiNumber: '', nutritionRaw: {} };
   }
 }

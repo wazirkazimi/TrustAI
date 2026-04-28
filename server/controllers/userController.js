@@ -1,5 +1,4 @@
-const User = require('../models/User');
-const Scan = require('../models/Scan');
+const supabase = require('../config/supabase');
 
 // PUT /api/user/mode
 exports.updateHealthMode = async (req, res) => {
@@ -9,10 +8,21 @@ exports.updateHealthMode = async (req, res) => {
     if (!validModes.includes(healthMode))
       return res.status(400).json({ message: 'Invalid health mode' });
 
-    const user = await User.findByIdAndUpdate(
-      req.user._id, { healthMode }, { new: true, select: '-password' }
-    );
-    res.json(user);
+    const { data: user, error } = await supabase
+      .from('users')
+      .update({ health_mode: healthMode })
+      .eq('id', req.user.id)
+      .select('id, name, email, health_mode, veg_filter')
+      .single();
+
+    if (error) throw error;
+    res.json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      healthMode: user.health_mode,
+      vegFilter: user.veg_filter
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -22,10 +32,21 @@ exports.updateHealthMode = async (req, res) => {
 exports.updateVegPreference = async (req, res) => {
   try {
     const { vegFilter } = req.body;
-    const user = await User.findByIdAndUpdate(
-      req.user._id, { vegFilter: Boolean(vegFilter) }, { new: true, select: '-password' }
-    );
-    res.json(user);
+    const { data: user, error } = await supabase
+      .from('users')
+      .update({ veg_filter: Boolean(vegFilter) })
+      .eq('id', req.user.id)
+      .select('id, name, email, health_mode, veg_filter')
+      .single();
+
+    if (error) throw error;
+    res.json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      healthMode: user.health_mode,
+      vegFilter: user.veg_filter
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -34,8 +55,13 @@ exports.updateVegPreference = async (req, res) => {
 // GET /api/user/bookmarks
 exports.getBookmarks = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).populate('bookmarks');
-    res.json(user.bookmarks);
+    const { data: bookmarks, error } = await supabase
+      .from('bookmarks')
+      .select('*, scans(*)')
+      .eq('user_id', req.user.id);
+
+    if (error) throw error;
+    res.json(bookmarks.map(b => b.scans));
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -44,18 +70,28 @@ exports.getBookmarks = async (req, res) => {
 // POST /api/user/bookmark/:scanId
 exports.bookmarkScan = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
     const scanId = req.params.scanId;
 
-    const idx = user.bookmarks.indexOf(scanId);
-    if (idx > -1) {
-      user.bookmarks.splice(idx, 1); // un-bookmark
-    } else {
-      user.bookmarks.push(scanId);   // bookmark
-    }
+    // Check if already bookmarked
+    const { data: existing } = await supabase
+      .from('bookmarks')
+      .select('id')
+      .eq('user_id', req.user.id)
+      .eq('scan_id', scanId)
+      .single();
 
-    await user.save();
-    res.json({ bookmarks: user.bookmarks });
+    if (existing) {
+      await supabase
+        .from('bookmarks')
+        .delete()
+        .eq('id', existing.id);
+      res.json({ message: 'Un-bookmarked' });
+    } else {
+      await supabase
+        .from('bookmarks')
+        .insert([{ user_id: req.user.id, scan_id: scanId }]);
+      res.json({ message: 'Bookmarked' });
+    }
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

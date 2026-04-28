@@ -1,125 +1,149 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Search, ScanLine, ArrowRight, Bell } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Search, ScanLine, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import PageWrapper from '../components/layout/PageWrapper';
 
 const categories = [
-  { name: 'Instant Food', image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=200&q=80', tag: 'instant-food' },
-  { name: 'Munchies', image: 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?auto=format&fit=crop&w=200&q=80', tag: 'snacks' },
-  { name: 'Cakes & Bakes', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=200&q=80', tag: 'bakery' },
-  { name: 'Dry Fruits, Oil & Masalas', image: 'https://images.unsplash.com/photo-1585238342024-78d387f4a707?auto=format&fit=crop&w=200&q=80', tag: 'pantry' },
-  { name: 'Rice, Atta & Dals', image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=200&q=80', tag: 'grains' },
-  { name: 'Tea & Coffee', image: 'https://images.unsplash.com/photo-1544787210-2213d4b2cc2c?auto=format&fit=crop&w=200&q=80', tag: 'beverages' },
-  { name: 'Supplements', image: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=200&q=80', tag: 'health' },
-  { name: 'Biscuits', image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=200&q=80', tag: 'biscuits' },
+  { name: 'Instant Food', emoji: '🍜', q: 'instant noodles' },
+  { name: 'Munchies',     emoji: '🍿', q: 'chips snacks' },
+  { name: 'Dairy',        emoji: '🥛', q: 'amul dairy' },
+  { name: 'Chocolates',   emoji: '🍫', q: 'chocolate' },
+  { name: 'Breakfast',    emoji: '🥣', q: 'breakfast cereals' },
+  { name: 'Health',       emoji: '🌿', q: 'health food protein' },
+  { name: 'Bakery',       emoji: '🍞', q: 'bread biscuits' },
+  { name: 'Beverages',    emoji: '🥤', q: 'cold drinks juice' },
 ];
 
-const recentScans = [
-  { id: '1', name: 'Maggi Masala Noodles', score: 2.5, rating: 'Poor', grade: 'D', gradeColor: 'bg-red-500', bgLight: 'bg-red-50', textColor: 'text-red-600', image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=200&q=80' },
-  { id: '2', name: 'Oats & Honey Bar', score: 7.8, rating: 'Good', grade: 'B', gradeColor: 'bg-green-500', bgLight: 'bg-green-50', textColor: 'text-green-600', image: 'https://images.unsplash.com/photo-1622484211148-71ee525d5022?auto=format&fit=crop&w=200&q=80' },
-  { id: '3', name: 'Lays Classic Salted', score: 3.1, rating: 'Okay', grade: 'C', gradeColor: 'bg-amber-400', bgLight: 'bg-amber-50', textColor: 'text-amber-600', image: 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?auto=format&fit=crop&w=200&q=80' },
+const trending = [
+  { barcode: '3017620422003', name: 'Nutella Hazelnut Spread', brand: 'Ferrero', grade: 'E', gradeColor: 'bg-red-600', score: '1.8', scoreColor: 'text-red-600', img: 'https://images.unsplash.com/photo-1553456523-17211394c633?auto=format&fit=crop&w=200&q=80' },
+  { barcode: '5449000000996', name: 'Coca-Cola', brand: 'The Coca-Cola Company', grade: 'E', gradeColor: 'bg-red-600', score: '1.2', scoreColor: 'text-red-600', img: 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?auto=format&fit=crop&w=200&q=80' },
+  { barcode: '5000159461122', name: 'Kit Kat 4 Finger', brand: 'Nestle', grade: 'D', gradeColor: 'bg-orange-500', score: '2.8', scoreColor: 'text-orange-500', img: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=200&q=80' },
+  { barcode: '028400064057', name: "Lay's Classic Chips", brand: 'Frito-Lay', grade: 'D', gradeColor: 'bg-orange-500', score: '3.0', scoreColor: 'text-orange-500', img: 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?auto=format&fit=crop&w=200&q=80' },
+  { barcode: '038000845093', name: 'Pringles Original', brand: 'Kelloggs', grade: 'D', gradeColor: 'bg-orange-500', score: '2.5', scoreColor: 'text-orange-500', img: 'https://images.unsplash.com/photo-1576186726115-4d51596775d1?auto=format&fit=crop&w=200&q=80' },
+  { barcode: '070221007432', name: 'Oreo Chocolate Cookies', brand: 'Nabisco', grade: 'E', gradeColor: 'bg-red-600', score: '2.0', scoreColor: 'text-red-500', img: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=200&q=80' },
 ];
 
-const Home = () => {
-  const [isVeg, setIsVeg] = useState(false);
+export default function Home() {
+  const [searchQ, setSearchQ] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    if (e.key === 'Enter' && searchQ.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQ.trim())}`);
+    }
+  };
 
   return (
-    <PageWrapper className="bg-gray-50">
+    <PageWrapper className="bg-gray-50 pb-28">
       {/* Header */}
-      <div className="bg-white pt-12 pb-6 px-6 rounded-b-3xl shadow-sm">
-        <div className="flex justify-between items-start mb-5">
-          <div>
-            <h1 className="text-2xl font-black text-gray-900">Hi, Alex 👋</h1>
+      <div className="bg-white pt-12 pb-5 px-4 sm:px-6 rounded-b-3xl shadow-sm">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex justify-between items-center mb-5">
+            <div>
+              <h1 className="text-2xl font-black text-gray-900">Hi there 👋</h1>
+              <p className="text-gray-400 text-sm">Ready to make a smart food choice?</p>
+            </div>
+            <Link to="/scan"
+              className="w-11 h-11 bg-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-600/30">
+              <ScanLine size={22} className="text-white"/>
+            </Link>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setIsVeg(!isVeg)}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold border-2 transition-all ${isVeg ? 'bg-green-50 border-green-400 text-green-700' : 'bg-gray-50 border-gray-200 text-gray-500'}`}
-            >
-              <span className={`w-2 h-2 rounded-full ${isVeg ? 'bg-green-500' : 'bg-gray-400'}`}></span>
-              VEGAN
-            </button>
+
+          {/* Live search bar */}
+          <div className="relative flex items-center">
+            <Search size={18} className="absolute left-4 text-gray-400 z-10"/>
+            <input
+              type="text"
+              value={searchQ}
+              onChange={e => setSearchQ(e.target.value)}
+              onKeyDown={handleSearch}
+              placeholder="Search products by name…"
+              className="w-full bg-gray-100 border border-gray-100 rounded-2xl py-3.5 pl-11 pr-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-500/30 focus:bg-white transition-all"
+            />
           </div>
         </div>
-
-        {/* Search Bar */}
-        <Link to="/search" className="flex items-center bg-gray-100 rounded-2xl py-3.5 px-4 gap-3 hover:bg-gray-200 transition-colors">
-          <Search size={18} className="text-gray-400" />
-          <span className="text-sm text-gray-400">Search products by name…</span>
-        </Link>
       </div>
 
-      <div className="px-6 py-6 space-y-8">
+      <div className="px-4 sm:px-6 py-6">
+        <div className="max-w-5xl mx-auto space-y-8">
 
-        {/* Big Scan CTA */}
-        <motion.div whileTap={{ scale: 0.97 }}>
-          <Link to="/scan" className="block">
-            <div className="bg-purple-600 rounded-3xl p-5 text-white shadow-xl shadow-purple-600/25 relative overflow-hidden">
-              <div className="absolute -right-6 -top-6 w-28 h-28 bg-white/10 rounded-full" />
-              <div className="absolute -right-2 -bottom-6 w-20 h-20 bg-white/5 rounded-full" />
-              <div className="relative z-10 flex items-center justify-between">
-                <div>
-                  <h2 className="text-lg font-black mb-1">Scan a Product</h2>
-                  <p className="text-purple-200 text-xs">Verify FSSAI · Get Health Grade</p>
-                </div>
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-lg">
-                  <ScanLine size={28} className="text-purple-600" />
+          {/* Scan CTA Banner */}
+          <motion.div whileTap={{ scale: 0.98 }}>
+            <Link to="/scan" className="block">
+              <div className="bg-purple-600 rounded-3xl p-5 sm:p-6 text-white shadow-xl shadow-purple-600/25 relative overflow-hidden">
+                <div className="absolute -right-6 -top-6 w-32 h-32 bg-white/10 rounded-full"/>
+                <div className="absolute right-10 -bottom-8 w-24 h-24 bg-white/5 rounded-full"/>
+                <div className="relative z-10 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-xl sm:text-2xl font-black mb-1">Scan a Product</h2>
+                    <p className="text-purple-200 text-sm">Verify FSSAI · Get Health Grade · See Additives</p>
+                  </div>
+                  <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0">
+                    <ScanLine size={32} className="text-purple-600"/>
+                  </div>
                 </div>
               </div>
+            </Link>
+          </motion.div>
+
+          {/* Categories */}
+          <div>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-base font-black text-gray-900">Browse Categories</h2>
+              <Link to="/search" className="text-purple-600 text-xs font-bold flex items-center gap-1">All <ArrowRight size={12}/></Link>
             </div>
-          </Link>
-        </motion.div>
-
-        {/* Categories */}
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-base font-black text-gray-900">Browse Categories</h2>
-            <button className="text-purple-600 text-xs font-bold flex items-center gap-1">All <ArrowRight size={12} /></button>
-          </div>
-          <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-6 px-6">
-            {categories.map((cat, i) => (
-              <Link to={`/search?q=${cat.tag}`} key={i} className="flex flex-col items-center flex-shrink-0 gap-2">
-                <div className="w-16 h-16 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center overflow-hidden">
-                  <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
-                </div>
-                <span className="text-[11px] font-semibold text-gray-500">{cat.name}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Recent Scans */}
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-base font-black text-gray-900">Recent Scans</h2>
-            <Link to="/log" className="text-purple-600 text-xs font-bold flex items-center gap-1">See All <ArrowRight size={12} /></Link>
-          </div>
-          <div className="space-y-3">
-            {recentScans.map(p => (
-              <Link to={`/results/${p.id}`} key={p.id}>
-                <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center gap-3 hover:shadow-md transition-all">
-                  <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0">
-                    <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
+            <div className="grid grid-cols-4 sm:grid-cols-8 gap-3">
+              {categories.map((cat, i) => (
+                <Link to={`/search?q=${encodeURIComponent(cat.q)}`} key={i}
+                  className="flex flex-col items-center gap-2 group">
+                  <div className="w-full aspect-square bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center text-2xl sm:text-3xl group-hover:border-purple-200 group-hover:shadow-md transition-all">
+                    {cat.emoji}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-gray-900 text-sm truncate">{p.name}</h3>
-                    <div className={`inline-flex items-center mt-1.5 px-2 py-0.5 rounded-lg ${p.bgLight}`}>
-                      <span className={`text-xs font-bold ${p.textColor}`}>{p.score}/10 · {p.rating}</span>
+                  <span className="text-[10px] sm:text-xs font-semibold text-gray-500 text-center leading-tight">{cat.name}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Trending Products */}
+          <div>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-base font-black text-gray-900">Trending Products</h2>
+              <Link to="/search" className="text-purple-600 text-xs font-bold flex items-center gap-1">Explore <ArrowRight size={12}/></Link>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+              {trending.map((p) => (
+                <Link to={`/results/${p.barcode}`} key={p.barcode}
+                  className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 hover:shadow-md hover:border-purple-100 transition-all group">
+                  <div className="w-full aspect-square rounded-xl overflow-hidden bg-gray-50 mb-2.5 relative">
+                    <img src={p.img} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                    <div className={`absolute top-2 right-2 ${p.gradeColor} w-7 h-7 rounded-lg flex items-center justify-center shadow-sm`}>
+                      <span className="text-white font-black text-xs">{p.grade}</span>
                     </div>
                   </div>
-                  <div className={`w-10 h-10 rounded-xl ${p.gradeColor} flex items-center justify-center text-white font-black text-base shadow-sm flex-shrink-0`}>
-                    {p.grade}
-                  </div>
-                </div>
-              </Link>
-            ))}
+                  <h3 className="font-bold text-gray-900 text-xs leading-tight line-clamp-2 mb-0.5">{p.name}</h3>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider truncate">{p.brand}</p>
+                  <p className={`text-xs font-black mt-1.5 ${p.scoreColor}`}>{p.score}/10 · {parseFloat(p.score) >= 7 ? 'Good' : parseFloat(p.score) >= 4 ? 'Okay' : 'Poor'}</p>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
 
+          {/* Quick tip */}
+          <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-3xl p-5 text-white flex items-center gap-4">
+            <div className="text-4xl flex-shrink-0">💡</div>
+            <div>
+              <p className="font-black text-base">Know Your Food</p>
+              <p className="text-purple-200 text-xs mt-1 leading-relaxed">Tap any product to see its FSSAI status, additives, and health grade from 4 global systems.</p>
+            </div>
+            <Link to="/rating-system" className="bg-white text-purple-600 font-black text-xs px-4 py-2 rounded-xl flex-shrink-0 hover:bg-purple-50 transition-colors">
+              Learn More
+            </Link>
+          </div>
+
+        </div>
       </div>
     </PageWrapper>
   );
-};
-
-export default Home;
+}

@@ -27,8 +27,8 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  const register = async (name, email, password) => {
-    const { data } = await authAPI.register({ name, email, password });
+  const register = async (userData) => {
+    const { data } = await authAPI.register(userData);
     localStorage.setItem('foodtrust_token', data.token);
     localStorage.setItem('foodtrust_user', JSON.stringify(data));
     setUser(data);
