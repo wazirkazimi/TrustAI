@@ -7,7 +7,16 @@ import { Search as SearchIcon, ChevronRight, Loader2, X, TrendingUp } from 'luci
 
 const API = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
-const CATEGORIES = ['All', 'Instant Food', 'Snacks', 'Dairy', 'Biscuits', 'Chocolate', 'Beverages', 'Health Food'];
+const CATEGORIES = [
+  { label: 'All', q: '' },
+  { label: 'Instant Food', q: 'instant noodles' },
+  { label: 'Snacks', q: 'chips snacks' },
+  { label: 'Dairy', q: 'amul dairy' },
+  { label: 'Biscuits', q: 'biscuits' },
+  { label: 'Chocolate', q: 'chocolate' },
+  { label: 'Beverages', q: 'cold drinks juice' },
+  { label: 'Health Food', q: 'protein oats' }
+];
 const POPULAR = [
   { label: 'Maggi Noodles', q: 'maggi noodles' },
   { label: 'Amul Milk', q: 'amul milk' },
@@ -89,9 +98,11 @@ export default function Search() {
   };
 
   const handleCategory = (cat) => {
-    setActiveCategory(cat);
-    const q = cat === 'All' ? query : cat;
-    setSearchParams({ q });
+    setActiveCategory(cat.label);
+    const q = cat.label === 'All' ? '' : cat.q;
+    setQuery(q);
+    if (q) setSearchParams({ q });
+    else setSearchParams({});
   };
 
   const loadMore = () => {
@@ -135,10 +146,10 @@ export default function Search() {
         {/* Category chips */}
         <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
           {CATEGORIES.map(cat => (
-            <button key={cat} onClick={() => handleCategory(cat)}
+            <button key={cat.label} onClick={() => handleCategory(cat)}
               className={`flex-shrink-0 px-4 py-1.5 rounded-xl text-xs font-bold border transition-all
-                ${activeCategory === cat ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-gray-500 border-gray-200 hover:border-purple-300'}`}>
-              {cat}
+                ${activeCategory === cat.label ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-gray-500 border-gray-200 hover:border-purple-300'}`}>
+              {cat.label}
             </button>
           ))}
         </div>

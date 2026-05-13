@@ -1,12 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Search, ScanLine, BookOpen, User } from 'lucide-react';
+import { Home, ScanLine, User, PhoneCall } from 'lucide-react';
 
 const navItems = [
-  { name: 'Home',   path: '/home',    icon: Home },
-  { name: 'Search', path: '/search',  icon: Search },
-  { name: 'Scan',   path: '/scan',    icon: ScanLine, special: true },
-  { name: 'Log',    path: '/log',     icon: BookOpen },
-  { name: 'Profile',path: '/profile', icon: User },
+  { name: 'Home',    path: '/home',    icon: Home },
+  { name: 'Scan',    path: '/scan',    icon: ScanLine, special: true },
+  { name: 'Experts', path: '/experts', icon: PhoneCall },
+  { name: 'Profile', path: '/profile', icon: User },
 ];
 
 export default function BottomNav() {

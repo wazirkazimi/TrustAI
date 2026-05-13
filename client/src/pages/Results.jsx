@@ -207,7 +207,7 @@ export default function Results() {
                 </div>
 
                 {/* 4 Grade Badges */}
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {[
                     { label: 'Custom', val: `${grades.customScore}`, color: sc.bg },
                     { label: 'Nutri-Score', val: grades.nutriScore, color: nutriScoreBg(grades.nutriScore) },
@@ -331,7 +331,7 @@ export default function Results() {
               <h3 className="font-black text-gray-900 text-sm">Better Alternatives 💡</h3>
               <span className="text-[10px] font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full uppercase">AI Suggested</span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               {[
                 { name: 'Oats & Honey Bar', score: 7.8, img: 'https://images.unsplash.com/photo-1622484211148-71ee525d5022?auto=format&fit=crop&w=150&q=80', desc: 'High Protein · Low Sugar' },
                 { name: 'Multigrain Snacks', score: 8.2, img: 'https://images.unsplash.com/photo-1599490659223-915224cc65b5?auto=format&fit=crop&w=150&q=80', desc: 'Zero Trans Fat · Baked' },

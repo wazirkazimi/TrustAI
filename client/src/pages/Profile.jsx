@@ -146,13 +146,13 @@ const Profile = () => {
         {/* Menu items */}
         <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
           {[
-            { icon: ScanLine, label: 'Full Scan History', color: 'text-blue-500' },
-            { icon: Zap, label: 'Subscription Plan', color: 'text-amber-500' },
-            { icon: Heart, label: 'Manage Allergies', color: 'text-red-500' },
-            { icon: BookmarkIcon, label: 'Bookmarked Products', color: 'text-purple-600' },
-            { icon: AlertTriangle, label: 'My Reports & Disputes', color: 'text-orange-500' },
-          ].map(({ icon: Icon, label, color }, i) => (
-            <button key={i} className="w-full flex items-center justify-between px-6 py-5 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 group">
+            { icon: BookmarkIcon, label: 'Food Log & Bookmarks', color: 'text-purple-600', path: '/log' },
+            { icon: ScanLine, label: 'Full Scan History', color: 'text-blue-500', path: '/log' },
+            { icon: Zap, label: 'Subscription Plan', color: 'text-amber-500', path: '#' },
+            { icon: Heart, label: 'Manage Allergies', color: 'text-red-500', path: '#' },
+            { icon: AlertTriangle, label: 'My Reports & Disputes', color: 'text-orange-500', path: '#' },
+          ].map(({ icon: Icon, label, color, path }, i) => (
+            <button key={i} onClick={() => navigate(path)} className="w-full flex items-center justify-between px-6 py-5 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 group">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Icon size={20} className={color} />

@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import About from './pages/About';
 import HowItWorks from './pages/HowItWorks';
 import RatingSystem from './pages/RatingSystem';
+import Experts from './pages/Experts';
 
 import BottomNav from './components/layout/BottomNav';
 import Register from './pages/Register';
@@ -40,6 +41,7 @@ function AppContent() {
           <Route path="/results/:scanId" element={<Results />} />
           <Route path="/search" element={<Search />} />
           <Route path="/categories" element={<Categories />} />
+          <Route path="/experts" element={<Experts />} />
           <Route path="/log" element={<FoodLog />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>

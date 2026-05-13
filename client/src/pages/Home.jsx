@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Search, ScanLine, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import PageWrapper from '../components/layout/PageWrapper';
+import { useAuth } from '../context/AuthContext';
 
 const categories = [
   { name: 'Instant Food', emoji: '🍜', q: 'instant noodles' },
@@ -16,15 +17,16 @@ const categories = [
 ];
 
 const trending = [
-  { barcode: '3017620422003', name: 'Nutella Hazelnut Spread', brand: 'Ferrero', grade: 'E', gradeColor: 'bg-red-600', score: '1.8', scoreColor: 'text-red-600', img: 'https://images.unsplash.com/photo-1553456523-17211394c633?auto=format&fit=crop&w=200&q=80' },
-  { barcode: '5449000000996', name: 'Coca-Cola', brand: 'The Coca-Cola Company', grade: 'E', gradeColor: 'bg-red-600', score: '1.2', scoreColor: 'text-red-600', img: 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?auto=format&fit=crop&w=200&q=80' },
-  { barcode: '5000159461122', name: 'Kit Kat 4 Finger', brand: 'Nestle', grade: 'D', gradeColor: 'bg-orange-500', score: '2.8', scoreColor: 'text-orange-500', img: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=200&q=80' },
-  { barcode: '028400064057', name: "Lay's Classic Chips", brand: 'Frito-Lay', grade: 'D', gradeColor: 'bg-orange-500', score: '3.0', scoreColor: 'text-orange-500', img: 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?auto=format&fit=crop&w=200&q=80' },
-  { barcode: '038000845093', name: 'Pringles Original', brand: 'Kelloggs', grade: 'D', gradeColor: 'bg-orange-500', score: '2.5', scoreColor: 'text-orange-500', img: 'https://images.unsplash.com/photo-1576186726115-4d51596775d1?auto=format&fit=crop&w=200&q=80' },
-  { barcode: '070221007432', name: 'Oreo Chocolate Cookies', brand: 'Nabisco', grade: 'E', gradeColor: 'bg-red-600', score: '2.0', scoreColor: 'text-red-500', img: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=200&q=80' },
+  { barcode: '3017620422003', name: 'Nutella Hazelnut Spread', brand: 'Ferrero', grade: 'E', gradeColor: 'bg-red-600', score: '1.8', scoreColor: 'text-red-600', img: 'https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.820.400.jpg' },
+  { barcode: '5449000000996', name: 'Coca-Cola', brand: 'The Coca-Cola Company', grade: 'E', gradeColor: 'bg-red-600', score: '1.2', scoreColor: 'text-red-600', img: 'https://images.openfoodfacts.org/images/products/544/900/000/0996/front_en.1118.400.jpg' },
+  { barcode: '5000159461122', name: 'Kit Kat 4 Finger', brand: 'Nestle', grade: 'D', gradeColor: 'bg-orange-500', score: '2.8', scoreColor: 'text-orange-500', img: 'https://images.openfoodfacts.org/images/products/500/015/946/1122/front_en.216.400.jpg' },
+  { barcode: '028400064057', name: "Lay's Classic Chips", brand: 'Frito-Lay', grade: 'D', gradeColor: 'bg-orange-500', score: '3.0', scoreColor: 'text-orange-500', img: 'https://images.openfoodfacts.org/images/products/002/840/006/4057/front_en.14.400.jpg' },
+  { barcode: '038000845093', name: 'Pringles Original', brand: 'Kelloggs', grade: 'D', gradeColor: 'bg-orange-500', score: '2.5', scoreColor: 'text-orange-500', img: 'https://images.openfoodfacts.org/images/products/003/800/084/5093/front_en.30.400.jpg' },
+  { barcode: '070221007432', name: 'Oreo Chocolate Cookies', brand: 'Nabisco', grade: 'E', gradeColor: 'bg-red-600', score: '2.0', scoreColor: 'text-red-500', img: 'https://images.openfoodfacts.org/images/products/007/022/100/7432/front_en.11.400.jpg' },
 ];
 
 export default function Home() {
+  const { user } = useAuth();
   const [searchQ, setSearchQ] = useState('');
   const navigate = useNavigate();
 
@@ -41,13 +43,9 @@ export default function Home() {
         <div className="max-w-5xl mx-auto">
           <div className="flex justify-between items-center mb-5">
             <div>
-              <h1 className="text-2xl font-black text-gray-900">Hi there 👋</h1>
+              <h1 className="text-2xl font-black text-gray-900">Hi, {user?.name || 'Wazir'} 👋</h1>
               <p className="text-gray-400 text-sm">Ready to make a smart food choice?</p>
             </div>
-            <Link to="/scan"
-              className="w-11 h-11 bg-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-600/30">
-              <ScanLine size={22} className="text-white"/>
-            </Link>
           </div>
 
           {/* Live search bar */}

@@ -56,6 +56,7 @@ async function searchProductsByName(query, page = 1) {
         json: 1,
         page_size: 20,
         page,
+        countries_tags_en: 'india',
         fields: 'code,product_name,product_name_en,brands,image_url,image_small_url,labels,ingredients_text,categories,additives_tags',
       },
       timeout: 10000,

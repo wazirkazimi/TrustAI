@@ -6,13 +6,15 @@
 export function calcCustomScore(nutrition, healthMode = 'default') {
   const { sugar = 0, saturatedFat = 0, transFat = 0, calories = 0, fat = 0, protein = 0 } = nutrition;
   let score = 10;
-  if (sugar > 15) score -= 3;
-  if (saturatedFat > 5) score -= 2;
+  if (sugar > 5) score -= 2;
+  if (sugar > 10) score -= 3;
+  if (sugar > 20) score -= 2;
+  if (saturatedFat > 3) score -= 2;
   if (transFat > 0) score -= 3;
-  if (calories > 400) score -= 1;
-  if (healthMode === 'diabetic' && sugar > 5) score -= 2;
-  if (healthMode === 'weightLoss') { if (calories > 300) score -= 1; if (fat > 10) score -= 1; }
-  if (healthMode === 'gym') { if (protein > 20) score += 1; if (sugar > 10) score -= 2; }
+  if (calories > 250) score -= 2;
+  if (healthMode === 'diabetic' && sugar > 3) score -= 3;
+  if (healthMode === 'weightLoss') { if (calories > 150) score -= 2; if (fat > 5) score -= 1; }
+  if (healthMode === 'gym') { if (protein > 15) score += 1; if (sugar > 5) score -= 2; }
   return Math.max(0, Math.min(10, parseFloat(score.toFixed(1))));
 }
 
@@ -44,12 +46,13 @@ export function calcNutriGrade(nutrition) {
 export function calcJapaneseGrade(nutrition) {
   const { calories = 0, fat = 0, sodium = 0, sugar = 0, protein = 0, fiber = 0 } = nutrition;
   let score = 100;
-  if (calories > 400) score -= 20;
-  if (fat > 15) score -= 20;
-  if (sodium > 600) score -= 15;
-  if (sugar > 10) score -= 10;
-  if (protein > 5) score += 10;
-  if (fiber > 2)   score += 10;
+  if (calories > 250) score -= 20;
+  if (fat > 10) score -= 20;
+  if (sodium > 400) score -= 20;
+  if (sugar > 5) score -= 25;
+  if (sugar > 15) score -= 20;
+  if (protein > 10) score += 10;
+  if (fiber > 3)   score += 10;
   score = Math.max(0, Math.min(100, score));
   if (score >= 80) return 'Excellent';
   if (score >= 60) return 'Good';
@@ -58,6 +61,16 @@ export function calcJapaneseGrade(nutrition) {
 }
 
 export function computeAllGrades(nutrition, healthMode = 'default') {
+  const isMissing = !nutrition || Object.values(nutrition).every(v => !v || v === 0);
+  if (isMissing) {
+    return {
+      customScore: 'N/A',
+      nutriScore: '?',
+      nutriGrade: '?',
+      japaneseGrade: 'N/A',
+    };
+  }
+
   return {
     customScore:   calcCustomScore(nutrition, healthMode),
     nutriScore:    calcNutriScore(nutrition),
@@ -66,8 +79,9 @@ export function computeAllGrades(nutrition, healthMode = 'default') {
   };
 }
 
-/** Helper — returns Tailwind color classes for a score 0-10 */
+/** Helper — returns Tailwind color classes for a score 0-10 or N/A */
 export function scoreColors(score) {
+  if (score === 'N/A') return { bg: 'bg-gray-400', text: 'text-gray-500', light: 'bg-gray-100', label: 'No Data' };
   if (score >= 7) return { bg: 'bg-green-500',  text: 'text-green-600',  light: 'bg-green-50',  label: 'Good' };
   if (score >= 4) return { bg: 'bg-amber-400',  text: 'text-amber-600',  light: 'bg-amber-50',  label: 'Okay' };
   return           { bg: 'bg-red-500',    text: 'text-red-600',    light: 'bg-red-50',    label: 'Poor' };
