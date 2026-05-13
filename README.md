@@ -63,9 +63,9 @@ A balance-based system that evaluates the ratio of macronutrients.
 
 ### Backend
 - **Node.js & Express**
-- **MongoDB & Mongoose** (Data Persistence)
+- **Supabase (PostgreSQL)** (Data Persistence & User Management)
 - **Cloudinary** (Image Storage)
-- **Google Vision API** (OCR Processing)
+- **Google Vision API** (OCR Processing via REST)
 - **Open Food Facts API** (Global Product Database Proxy)
 
 ---
@@ -74,7 +74,7 @@ A balance-based system that evaluates the ratio of macronutrients.
 
 ### Prerequisites
 - Node.js (v18+)
-- MongoDB (Local or Atlas)
+- Supabase Account / Project Setup
 - Google Cloud Vision API Key
 - Cloudinary Account (Optional, for image uploads)
 
@@ -94,12 +94,13 @@ A balance-based system that evaluates the ratio of macronutrients.
    Create a `.env` file in the `server` directory:
    ```env
    PORT=5000
-   MONGO_URI=your_mongodb_uri
+   SUPABASE_URL=your_supabase_project_url
+   SUPABASE_KEY=your_supabase_anon_key
    JWT_SECRET=your_jwt_secret
    CLOUDINARY_CLOUD_NAME=your_name
    CLOUDINARY_API_KEY=your_key
    CLOUDINARY_API_SECRET=your_secret
-   GOOGLE_APPLICATION_CREDENTIALS=path_to_your_vision_key.json
+   GOOGLE_VISION_API_KEY=your_google_vision_rest_api_key
    ```
 
 3. **Frontend Setup**
@@ -127,8 +128,8 @@ TrustAI/
 │   │   ├── pages/      # Route pages (Home, Scan, Results, Experts, etc.)
 │   │   └── utils/      # Grading Algorithms and API utilities
 ├── server/             # Node.js + Express Backend
-│   ├── controllers/    # Business logic
-│   ├── models/         # MongoDB Schemas
+│   ├── config/         # Supabase & Cloudinary configurations
+│   ├── controllers/    # Business logic & Database queries
 │   ├── routes/         # API Endpoints
 │   ├── services/       # OCR, Grading, and OpenFoodFacts Proxy
 │   └── middleware/     # Auth and Upload handling
