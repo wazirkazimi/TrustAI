@@ -93,29 +93,36 @@ export default function Search() {
 
   const qParam = searchParams.get('q') || '';
 
-  // Sync query state with searchParams q parameter reactively
+  // 1. Sync query state with searchParams (direct load or back/forward browser navigation)
   useEffect(() => {
-    setQuery(qParam);
-    if (qParam.length >= 2) {
-      setPage(1);
-      fetchResults(qParam, 1, false);
-    } else {
-      setResults([]);
+    if (qParam !== query) {
+      setQuery(qParam);
     }
-  }, [qParam, fetchResults]);
+  }, [qParam]);
 
-  // Debounce input to update searchParams URL and prevent API/Timeout leaks
+  // 2. Debounce input to update searchParams URL and fetch results (prevent loops & duplicate fetches)
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (query.trim().length >= 2) {
-        setSearchParams({ q: query.trim() });
-      } else if (query.trim() === '') {
-        setResults([]);
+    if (query.trim().length < 2) {
+      setResults([]);
+      if (query.trim() === '' && searchParams.get('q')) {
         setSearchParams({});
       }
+      return;
+    }
+
+    // Skip if we already performed this fetch instantly
+    if (latestQueryRef.current === query.trim().toLowerCase()) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setPage(1);
+      fetchResults(query.trim(), 1, false);
+      setSearchParams({ q: query.trim() });
     }, 500);
+
     return () => clearTimeout(timer);
-  }, [query, setSearchParams]);
+  }, [query, fetchResults, setSearchParams, searchParams]);
 
   const handleInput = (val) => {
     setQuery(val);
@@ -125,8 +132,21 @@ export default function Search() {
     setActiveCategory(cat.label);
     const q = cat.label === 'All' ? '' : cat.q;
     setQuery(q);
-    if (q) setSearchParams({ q });
-    else setSearchParams({});
+    if (q) {
+      setSearchParams({ q });
+      setPage(1);
+      fetchResults(q, 1, false);
+    } else {
+      setSearchParams({});
+      setResults([]);
+    }
+  };
+
+  const handlePopularSearch = (q) => {
+    setQuery(q);
+    setSearchParams({ q });
+    setPage(1);
+    fetchResults(q, 1, false);
   };
 
   const loadMore = () => {
@@ -254,7 +274,7 @@ export default function Search() {
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {POPULAR.map((s, i) => (
                   <button key={i}
-                    onClick={() => { setSearchParams({ q: s.q }); setQuery(s.q); }}
+                    onClick={() => handlePopularSearch(s.q)}
                     className="bg-white p-4 rounded-2xl border border-gray-100 text-left hover:border-purple-200 hover:shadow-sm transition-all shadow-sm group">
                     <p className="text-sm font-black text-gray-800 group-hover:text-purple-700 transition-colors">{s.label}</p>
                     <p className="text-[10px] text-purple-500 font-bold mt-1">Search →</p>
