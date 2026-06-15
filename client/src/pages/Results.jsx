@@ -6,6 +6,9 @@ import { ArrowLeft, Share2, Heart, ShieldCheck, AlertTriangle, ChevronRight, Ale
 import PageWrapper from '../components/layout/PageWrapper';
 import { computeAllGrades, scoreColors, nutriScoreBg } from '../utils/gradingAlgorithms';
 
+import { useAuth } from '../context/AuthContext';
+import { scanAPI } from '../utils/api';
+
 const API = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 const DEMO = {
@@ -64,6 +67,8 @@ export default function Results() {
   const [activeTab, setActiveTab] = useState('basic');
   const [bookmarked, setBookmarked] = useState(false);
 
+  const { user } = useAuth();
+
   useEffect(() => {
     const load = async () => {
       setLoading(true);
@@ -72,19 +77,39 @@ export default function Results() {
           setProduct(DEMO);
           return;
         }
-        // Use backend proxy to avoid CORS
-        const res = await axios.get(`${API}/search/product/${scanId}`, { timeout: 12000 });
-        setProduct({
-          name: res.data.productName || 'Unknown Product',
-          brand: res.data.brand || '',
-          fssaiValid: res.data.fssaiValid || false,
-          isVeg: res.data.vegStatus === 'veg',
-          image: res.data.imageUrl || '',
-          nutritionData: res.data.nutritionData || DEMO.nutritionData,
-          processingLevel: res.data.processingLevel || 'Unknown',
-          additives: (res.data.additives || []).map(a => a.replace('en:', '').toUpperCase()),
-        });
+
+        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(scanId);
+
+        if (isUUID) {
+          // Fetch OCR scan result from Supabase
+          const res = await scanAPI.getScanById(scanId);
+          const scan = res.data;
+          setProduct({
+            name: scan.product_name || 'OCR Scanned Product',
+            brand: scan.brand || 'Self Scanned',
+            fssaiValid: scan.fssai_status === 'valid',
+            isVeg: scan.veg_status === 'veg',
+            image: scan.image_url || '',
+            nutritionData: scan.nutrition_data || DEMO.nutritionData,
+            processingLevel: scan.processing_level || 'Processed',
+            additives: (scan.additives || []).map(a => a.replace('en:', '').toUpperCase()),
+          });
+        } else {
+          // Fetch standard barcode product details
+          const res = await axios.get(`${API}/search/product/${scanId}`, { timeout: 12000 });
+          setProduct({
+            name: res.data.productName || 'Unknown Product',
+            brand: res.data.brand || '',
+            fssaiValid: res.data.fssaiValid || false,
+            isVeg: res.data.vegStatus === 'veg',
+            image: res.data.imageUrl || '',
+            nutritionData: res.data.nutritionData || DEMO.nutritionData,
+            processingLevel: res.data.processingLevel || 'Unknown',
+            additives: (res.data.additives || []).map(a => a.replace('en:', '').toUpperCase()),
+          });
+        }
       } catch (err) {
+        console.error('Fetch scan error:', err);
         setProduct(DEMO);
         setError(err.response?.status === 404
           ? 'Product not found in database — showing demo data'
@@ -106,7 +131,7 @@ export default function Results() {
   );
 
   const nd = product.nutritionData;
-  const grades = computeAllGrades(nd);
+  const grades = computeAllGrades(nd, user?.healthMode || 'default');
   const sc = scoreColors(grades.customScore);
   const pColor = processingColor(product.processingLevel);
 
@@ -151,7 +176,7 @@ export default function Results() {
           <div className="flex items-center gap-4">
             <div className="w-20 h-20 rounded-2xl overflow-hidden bg-gray-50 border border-gray-100 flex-shrink-0 shadow-sm">
               {product.image
-                ? <img src={product.image} alt={product.name} className="w-full h-full object-cover"/>
+                ? <img src={product.image} alt={product.name} className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=200&q=80'; }}/>
                 : <div className="w-full h-full flex items-center justify-center text-4xl">🍱</div>
               }
             </div>
@@ -333,13 +358,13 @@ export default function Results() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               {[
-                { name: 'Oats & Honey Bar', score: 7.8, img: 'https://images.unsplash.com/photo-1622484211148-71ee525d5022?auto=format&fit=crop&w=150&q=80', desc: 'High Protein · Low Sugar' },
-                { name: 'Multigrain Snacks', score: 8.2, img: 'https://images.unsplash.com/photo-1599490659223-915224cc65b5?auto=format&fit=crop&w=150&q=80', desc: 'Zero Trans Fat · Baked' },
-                { name: 'Dark Chocolate', score: 7.1, img: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=150&q=80', desc: '85% Cocoa · Stevia' },
+                { barcode: '0016000176737', name: 'Oats & Honey Bar', score: 7.8, img: 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?auto=format&fit=crop&w=150&q=80', desc: 'High Protein · Low Sugar' },
+                { barcode: '8908005144076', name: 'Multigrain Snacks', score: 8.2, img: 'https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=150&q=80', desc: 'Zero Trans Fat · Baked' },
+                { barcode: '8901262070676', name: 'Dark Chocolate', score: 7.1, img: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=150&q=80', desc: '85% Cocoa · Stevia' },
               ].map((alt, i) => (
-                <div key={i} className="bg-white rounded-2xl p-3 border border-gray-100 shadow-sm flex items-center gap-3 cursor-pointer hover:shadow-md hover:border-purple-100 transition-all group">
+                <div key={i} onClick={() => navigate(`/results/${alt.barcode}`)} className="bg-white rounded-2xl p-3 border border-gray-100 shadow-sm flex items-center gap-3 cursor-pointer hover:shadow-md hover:border-purple-100 transition-all group">
                   <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0">
-                    <img src={alt.img} alt={alt.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform"/>
+                    <img src={alt.img} alt={alt.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=150&q=80'; }}/>
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-gray-900 text-xs truncate">{alt.name}</p>

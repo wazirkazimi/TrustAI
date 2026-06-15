@@ -8,14 +8,34 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser]       = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Restore session from localStorage on mount
+  // Restore session from localStorage on mount and sync from Supabase
   useEffect(() => {
-    const stored = localStorage.getItem('truebite_user');
-    const token  = localStorage.getItem('truebite_token');
-    if (stored && token) {
-      try { setUser(JSON.parse(stored)); } catch (_) {}
-    }
-    setLoading(false);
+    const restoreSession = async () => {
+      const stored = localStorage.getItem('truebite_user');
+      const token  = localStorage.getItem('truebite_token');
+      if (stored && token) {
+        try {
+          setUser(JSON.parse(stored));
+          // Fetch fresh user profile from backend database
+          const { data } = await authAPI.getMe();
+          // Merge token from stored session with data
+          const parsed = JSON.parse(stored);
+          const merged = { ...data, token: parsed.token };
+          setUser(merged);
+          localStorage.setItem('truebite_user', JSON.stringify(merged));
+        } catch (err) {
+          console.warn("Failed to sync user session on mount:", err.message);
+          // If token expired (401), we clean it up
+          if (err.response?.status === 401) {
+            localStorage.removeItem('truebite_token');
+            localStorage.removeItem('truebite_user');
+            setUser(null);
+          }
+        }
+      }
+      setLoading(false);
+    };
+    restoreSession();
   }, []);
 
   const login = async (email, password) => {

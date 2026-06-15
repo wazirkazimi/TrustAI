@@ -13,7 +13,7 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
 
     // Mock fallback if using dummy Supabase URL
-    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('aloesbmeqimvyprkljpy')) {
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('placeholder-supabase-url')) {
       console.warn('⚠️ Using Mock Database for Registration (Dummy Supabase URL detected)');
       return res.status(201).json({
         id: 'mock-uuid-1234',
@@ -78,7 +78,7 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: 'Email and password are required' });
 
     // Mock fallback if using dummy Supabase URL
-    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('aloesbmeqimvyprkljpy')) {
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('placeholder-supabase-url')) {
       console.warn('⚠️ Using Mock Database for Login (Dummy Supabase URL detected)');
       return res.json({
         id: 'mock-uuid-1234',
@@ -120,7 +120,7 @@ exports.login = async (req, res) => {
 exports.getMe = async (req, res) => {
   try {
     // Mock fallback if using dummy Supabase URL
-    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('aloesbmeqimvyprkljpy')) {
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('placeholder-supabase-url')) {
       return res.json({
         id: req.user.id,
         name: 'Demo User',

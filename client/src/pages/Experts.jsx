@@ -9,7 +9,9 @@ const experts = [
     exp: '10+ years',
     rating: '5.0',
     reviews: '1.2k',
+    specialties: ['Food Safety & Policy', 'Product Strategy', 'Regulatory Compliance'],
     image: 'https://ui-avatars.com/api/?name=Wazir+Kazimi&background=9333ea&color=fff&size=200',
+    price: '₹1,200/session',
   },
   {
     name: 'Jyotsna Bannur',
@@ -48,7 +50,7 @@ const Experts = () => {
           >
             <div className="flex gap-4">
               <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden bg-gray-100 flex-shrink-0 shadow-inner">
-                <img src={expert.image} alt={expert.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img src={expert.image} alt={expert.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onError={(e) => { e.target.onerror = null; e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(expert.name)}&background=9333ea&color=fff&size=200`; }}/>
               </div>
               <div className="flex-1">
                 <div className="flex justify-between items-start">
@@ -70,7 +72,7 @@ const Experts = () => {
             
             <div className="flex-1 mt-2 sm:mt-0 sm:border-l sm:border-gray-100 sm:pl-4 flex flex-col justify-between">
               <div className="flex flex-wrap gap-1.5 mb-3">
-                {expert.specialties.map((spec, j) => (
+                {expert.specialties?.map((spec, j) => (
                   <span key={j} className="bg-gray-50 text-gray-600 border border-gray-100 text-[10px] font-bold px-2 py-1 rounded-lg">
                     {spec}
                   </span>

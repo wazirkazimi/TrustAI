@@ -14,7 +14,7 @@ const protect = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
     // Mock fallback if using dummy Supabase URL
-    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('aloesbmeqimvyprkljpy')) {
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('placeholder-supabase-url')) {
       req.user = {
         id: decoded.id,
         name: 'Demo User',
@@ -59,7 +59,7 @@ const optionalAuth = async (req, res, next) => {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       // Mock fallback if using dummy Supabase URL
-      if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('aloesbmeqimvyprkljpy')) {
+      if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('placeholder-supabase-url')) {
         req.user = {
           id: decoded.id,
           name: 'Demo User',

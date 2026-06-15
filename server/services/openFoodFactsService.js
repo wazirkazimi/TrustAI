@@ -8,7 +8,10 @@ async function getProductByBarcode(barcode) {
   try {
     const res = await axios.get(
       `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`,
-      { timeout: 8000 }
+      { 
+        headers: { 'User-Agent': 'TrustAI - NodeJs - 1.0.0 - contact@trustai.org' },
+        timeout: 8000 
+      }
     );
 
     if (res.data.status !== 1) {
@@ -59,6 +62,7 @@ async function searchProductsByName(query, page = 1) {
         countries_tags_en: 'india',
         fields: 'code,product_name,product_name_en,brands,image_url,image_small_url,labels,ingredients_text,categories,additives_tags',
       },
+      headers: { 'User-Agent': 'TrustAI - NodeJs - 1.0.0 - contact@trustai.org' },
       timeout: 10000,
     });
 

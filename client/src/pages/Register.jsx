@@ -156,8 +156,8 @@ const Register = () => {
               className="space-y-6"
             >
               <div className="text-center mb-8">
-                <h1 className="text-4xl font-black text-gray-900 mb-2 tracking-tighter">Your Profile</h1>
-                <p className="text-gray-500 font-medium">Personalize your health analysis</p>
+                <h1 className="text-4xl font-black text-gray-900 mb-2 tracking-tighter">Welcome, {formData.name.split(' ')[0] || 'Friend'}! 🌟</h1>
+                <p className="text-gray-500 font-medium">Let's customize your health analysis</p>
               </div>
 
               <div className="space-y-6">
@@ -174,14 +174,29 @@ const Register = () => {
 
                 <div>
                   <label className="text-xs font-black text-gray-400 ml-1 uppercase tracking-widest">Your Primary Goal</label>
-                  <div className="grid grid-cols-2 gap-3 mt-2">
-                    {goals.map(g => (
+                  <div className="grid grid-cols-1 gap-2.5 mt-2">
+                    {Object.entries({
+                      'Weight Loss': { label: '🔥 Weight Loss', desc: 'Prioritizes low calorie & low fat' },
+                      'Muscle Gain': { label: '💪 Muscle Gain', desc: 'Prioritizes protein & clean carbs' },
+                      'Diabetic Friendly': { label: '🩺 Diabetic Friendly', desc: 'Strict alerts on sugars & carbs' },
+                      'Heart Healthy': { label: '❤️ Heart Healthy', desc: 'Limits sodium & saturated fats' },
+                      'Balanced': { label: '⚖️ Balanced Diet', desc: 'General balanced nutrition scoring' }
+                    }).map(([key, item]) => (
                       <button
-                        key={g}
-                        onClick={() => setFormData({ ...formData, goal: g })}
-                        className={`py-4 rounded-2xl border-2 text-sm font-black transition-all ${formData.goal === g ? 'border-purple-600 bg-purple-50 text-purple-700 shadow-lg shadow-purple-600/5' : 'border-gray-100 text-gray-400 bg-white hover:border-gray-200'}`}
+                        key={key}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, goal: key })}
+                        className={`p-4 rounded-2xl border-2 text-left transition-all flex items-center justify-between ${formData.goal === key ? 'border-purple-600 bg-purple-50 shadow-lg shadow-purple-600/5 scale-[1.01]' : 'border-gray-100 bg-white hover:border-purple-200'}`}
                       >
-                        {g}
+                        <div>
+                          <p className={`font-black text-sm ${formData.goal === key ? 'text-purple-700' : 'text-gray-800'}`}>{item.label}</p>
+                          <p className="text-[11px] text-gray-400 font-medium mt-0.5">{item.desc}</p>
+                        </div>
+                        {formData.goal === key && (
+                          <div className="bg-purple-600 text-white p-1 rounded-full flex-shrink-0">
+                            <Check size={12} strokeWidth={4} />
+                          </div>
+                        )}
                       </button>
                     ))}
                   </div>
@@ -289,6 +304,31 @@ const Register = () => {
                     ))}
                   </div>
                 </div>
+
+                {/* Profile Summary Card */}
+                <div className="bg-purple-50/50 border border-purple-100 rounded-3xl p-5 mt-4 space-y-2">
+                  <p className="text-[10px] font-black text-purple-600 uppercase tracking-widest mb-2">My Profile Summary 📝</p>
+                  <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-xs font-bold">
+                    <p className="text-gray-400">Dietary Goal:</p>
+                    <p className="text-gray-800 text-right">
+                      {{
+                        'Weight Loss': '🔥 Weight Loss',
+                        'Muscle Gain': '💪 Muscle Gain',
+                        'Diabetic Friendly': '🩺 Diabetic Friendly',
+                        'Heart Healthy': '❤️ Heart Healthy',
+                        'Balanced': '⚖️ Balanced Diet'
+                      }[formData.goal] || formData.goal}
+                    </p>
+                    <p className="text-gray-400">Vegan Mode:</p>
+                    <p className="text-gray-800 text-right">{formData.isVegan === 'Yes' ? '🌱 Enabled' : 'Disabled'}</p>
+                    <p className="text-gray-400">Grading Engine:</p>
+                    <p className="text-gray-800 text-right">{formData.gradingSystem}</p>
+                    <p className="text-gray-400">Restrictions:</p>
+                    <p className="text-gray-800 text-right truncate" title={formData.dietaryAllowances.join(', ') || 'None'}>
+                      {formData.dietaryAllowances.join(', ') || 'None'}
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <div className="flex gap-4 mt-8">
@@ -333,9 +373,9 @@ const Register = () => {
                 </motion.div>
               </div>
 
-              <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 tracking-tighter leading-tight">Welcome to the<br /><span className="text-purple-600">TrueBite Elite.</span></h1>
+              <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 tracking-tighter leading-tight">Welcome, <span className="text-purple-600">{formData.name.split(' ')[0] || 'Friend'}!</span></h1>
               <p className="text-gray-500 font-bold mb-12 max-w-sm mx-auto leading-relaxed">
-                Your personalized transparency engine is primed and ready. Science is now on your side.
+                Your personalized transparency engine is primed and ready for your <strong>{formData.goal}</strong> journey.
               </p>
 
               <div className="grid grid-cols-1 gap-4 text-left mb-12">

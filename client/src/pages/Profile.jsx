@@ -13,7 +13,7 @@ const healthModes = [
 ];
 
 const Profile = () => {
-  const { user: authUser, logout, loading: authLoading } = useAuth();
+  const { user: authUser, logout, loading: authLoading, updateUserLocal } = useAuth();
   const [user, setUser] = useState(null);
   const [activeMode, setActiveMode] = useState('default');
   const [isVeg, setIsVeg] = useState(false);
@@ -57,6 +57,7 @@ const Profile = () => {
     setUpdating(true);
     try {
       await userAPI.updateHealthMode(modeId);
+      updateUserLocal({ healthMode: modeId });
     } catch (err) {
       console.error('Update mode error:', err);
     } finally {
@@ -70,6 +71,7 @@ const Profile = () => {
     setUpdating(true);
     try {
       await userAPI.updateVeg(newVal);
+      updateUserLocal({ vegFilter: newVal });
     } catch (err) {
       console.error('Update veg error:', err);
     } finally {

@@ -5,6 +5,7 @@ const { protect, optionalAuth } = require('../middleware/authMiddleware');
 const { upload } = require('../middleware/uploadMiddleware');
 
 router.post('/barcode', optionalAuth, scanBarcode);
+router.post('/image',   optionalAuth, upload.single('image'), scanImage);
 router.get('/history',  protect, getScanHistory);
 router.get('/:id',      getScanById);
 

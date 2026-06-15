@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -45,9 +45,16 @@ export default function Search() {
   const [hasMore, setHasMore] = useState(false);
   const [total, setTotal] = useState(0);
 
+  const latestQueryRef = useRef('');
+
   const fetchResults = useCallback(async (q, pg = 1, append = false) => {
     if (!q || q.trim().length < 2) { setResults([]); return; }
+    if (!append) setResults([]); // Clear previous results to trigger loading state instantly
     setLoading(true);
+
+    const targetQuery = q.trim().toLowerCase();
+    latestQueryRef.current = targetQuery;
+
     try {
       const res = await axios.get(`${API}/search`, {
         params: { q: q.trim(), page: pg },
@@ -65,6 +72,12 @@ export default function Search() {
           nutriScore: '?',
           categories: p.categories || '',
         }));
+
+      // Prevent race conditions: check if this is still the active search target
+      if (latestQueryRef.current !== targetQuery) {
+        return;
+      }
+
       setResults(prev => append ? [...prev, ...mapped] : mapped);
       const count = res.data.count || 0;
       setTotal(count);
@@ -72,29 +85,40 @@ export default function Search() {
     } catch (err) {
       console.error('Search error:', err);
     } finally {
-      setLoading(false);
+      if (latestQueryRef.current === targetQuery) {
+        setLoading(false);
+      }
     }
   }, []);
 
-  // Debounced search
+  const qParam = searchParams.get('q') || '';
+
+  // Sync query state with searchParams q parameter reactively
   useEffect(() => {
-    const q = searchParams.get('q') || '';
-    setQuery(q);
-    if (q.length >= 2) {
+    setQuery(qParam);
+    if (qParam.length >= 2) {
       setPage(1);
-      fetchResults(q, 1, false);
+      fetchResults(qParam, 1, false);
     } else {
       setResults([]);
     }
-  }, [searchParams, fetchResults]);
+  }, [qParam, fetchResults]);
+
+  // Debounce input to update searchParams URL and prevent API/Timeout leaks
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (query.trim().length >= 2) {
+        setSearchParams({ q: query.trim() });
+      } else if (query.trim() === '') {
+        setResults([]);
+        setSearchParams({});
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [query, setSearchParams]);
 
   const handleInput = (val) => {
     setQuery(val);
-    const timer = setTimeout(() => {
-      if (val.length >= 2) setSearchParams({ q: val });
-      else setResults([]);
-    }, 500);
-    return () => clearTimeout(timer);
   };
 
   const handleCategory = (cat) => {
@@ -172,7 +196,7 @@ export default function Search() {
                       className="bg-white rounded-2xl p-3.5 flex items-center gap-3 shadow-sm border border-gray-100 hover:shadow-md hover:border-purple-100 transition-all group">
                       <div className="w-16 h-16 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
                         {p.image
-                          ? <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform"/>
+                          ? <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=150&q=80'; }}/>
                           : <div className="w-full h-full flex items-center justify-center text-2xl bg-purple-50">🍱</div>
                         }
                       </div>

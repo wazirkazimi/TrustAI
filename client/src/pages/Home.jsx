@@ -17,12 +17,12 @@ const categories = [
 ];
 
 const trending = [
-  { barcode: '3017620422003', name: 'Nutella Hazelnut Spread', brand: 'Ferrero', grade: 'E', gradeColor: 'bg-red-600', score: '1.8', scoreColor: 'text-red-600', img: 'https://placehold.co/400x400/9333ea/ffffff?text=Nutella' },
-  { barcode: '5449000000996', name: 'Coca-Cola', brand: 'The Coca-Cola Company', grade: 'E', gradeColor: 'bg-red-600', score: '1.2', scoreColor: 'text-red-600', img: 'https://placehold.co/400x400/dc2626/ffffff?text=Coca-Cola' },
-  { barcode: '5000159461122', name: 'Kit Kat 4 Finger', brand: 'Nestle', grade: 'D', gradeColor: 'bg-orange-500', score: '2.8', scoreColor: 'text-orange-500', img: 'https://placehold.co/400x400/ea580c/ffffff?text=Kit+Kat' },
-  { barcode: '028400064057', name: "Lay's Classic Chips", brand: 'Frito-Lay', grade: 'D', gradeColor: 'bg-orange-500', score: '3.0', scoreColor: 'text-orange-500', img: 'https://placehold.co/400x400/eab308/ffffff?text=Lays' },
-  { barcode: '038000845093', name: 'Pringles Original', brand: 'Kelloggs', grade: 'D', gradeColor: 'bg-orange-500', score: '2.5', scoreColor: 'text-orange-500', img: 'https://placehold.co/400x400/ea580c/ffffff?text=Pringles' },
-  { barcode: '070221007432', name: 'Oreo Chocolate Cookies', brand: 'Nabisco', grade: 'E', gradeColor: 'bg-red-600', score: '2.0', scoreColor: 'text-red-500', img: 'https://placehold.co/400x400/2563eb/ffffff?text=Oreo' },
+  { barcode: '3017620422003', name: 'Nutella Hazelnut Spread', brand: 'Ferrero', grade: 'E', gradeColor: 'bg-red-600', score: '1.8', scoreColor: 'text-red-600', img: 'https://images.unsplash.com/photo-1621938200927-e43b855b79af?auto=format&fit=crop&w=400&q=80' },
+  { barcode: '5449000000996', name: 'Coca-Cola', brand: 'The Coca-Cola Company', grade: 'E', gradeColor: 'bg-red-600', score: '1.2', scoreColor: 'text-red-600', img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=400&q=80' },
+  { barcode: '5000159461122', name: 'Kit Kat 4 Finger', brand: 'Nestle', grade: 'D', gradeColor: 'bg-orange-500', score: '2.8', scoreColor: 'text-orange-500', img: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?auto=format&fit=crop&w=400&q=80' },
+  { barcode: '028400064057', name: "Lay's Classic Chips", brand: 'Frito-Lay', grade: 'D', gradeColor: 'bg-orange-500', score: '3.0', scoreColor: 'text-orange-500', img: 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?auto=format&fit=crop&w=400&q=80' },
+  { barcode: '038000845093', name: 'Pringles Original', brand: 'Kelloggs', grade: 'D', gradeColor: 'bg-orange-500', score: '2.5', scoreColor: 'text-orange-500', img: 'https://images.unsplash.com/photo-1618038483079-b86a3e40760c?auto=format&fit=crop&w=400&q=80' },
+  { barcode: '070221007432', name: 'Oreo Chocolate Cookies', brand: 'Nabisco', grade: 'E', gradeColor: 'bg-red-600', score: '2.0', scoreColor: 'text-red-500', img: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=400&q=80' },
 ];
 
 export default function Home() {
@@ -49,17 +49,23 @@ export default function Home() {
           </div>
 
           {/* Live search bar */}
-          <div className="relative flex items-center">
-            <Search size={18} className="absolute left-4 text-gray-400 z-10"/>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            if (searchQ.trim()) {
+              navigate(`/search?q=${encodeURIComponent(searchQ.trim())}`);
+            }
+          }} className="relative flex items-center w-full">
+            <button type="submit" className="absolute left-4 text-gray-400 hover:text-purple-600 transition-colors z-10 bg-transparent border-none cursor-pointer">
+              <Search size={18} />
+            </button>
             <input
               type="text"
               value={searchQ}
               onChange={e => setSearchQ(e.target.value)}
-              onKeyDown={handleSearch}
               placeholder="Search products by name…"
               className="w-full bg-gray-100 border border-gray-100 rounded-2xl py-3.5 pl-11 pr-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-500/30 focus:bg-white transition-all"
             />
-          </div>
+          </form>
         </div>
       </div>
 
@@ -115,7 +121,7 @@ export default function Home() {
                 <Link to={`/results/${p.barcode}`} key={p.barcode}
                   className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 hover:shadow-md hover:border-purple-100 transition-all group">
                   <div className="w-full aspect-square rounded-xl overflow-hidden bg-gray-50 mb-2.5 relative">
-                    <img src={p.img} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                    <img src={p.img} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=150&q=80'; }}/>
                     <div className={`absolute top-2 right-2 ${p.gradeColor} w-7 h-7 rounded-lg flex items-center justify-center shadow-sm`}>
                       <span className="text-white font-black text-xs">{p.grade}</span>
                     </div>

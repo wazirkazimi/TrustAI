@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Camera, Zap, CheckCircle, ArrowLeft, ScanLine } from 'lucide-react';
+import { Camera, Zap, CheckCircle, ArrowLeft, ScanLine, Upload, Loader2 } from 'lucide-react';
 import { Html5QrcodeScanner, Html5QrcodeScanType } from 'html5-qrcode';
 import PageWrapper from '../components/layout/PageWrapper';
+import { scanAPI } from '../utils/api';
 
 const SAMPLE_BARCODES = [
   { name: 'Nutella 400g', barcode: '3017620422003' },
@@ -17,40 +18,80 @@ const SAMPLE_BARCODES = [
 const Scan = () => {
   const [barcode, setBarcode] = useState('');
   const [isScanning, setIsScanning] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [scanDone, setScanDone] = useState(false);
+  const [hasCamera, setHasCamera] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const scannerRef = useRef(null);
 
   useEffect(() => {
-    // Initialize html5-qrcode scanner
-    const scanner = new Html5QrcodeScanner(
-      "reader",
-      { 
-        fps: 10, 
-        qrbox: { width: 250, height: 150 },
-        supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
-        rememberLastUsedCamera: true
-      },
-      false
-    );
+    let isMounted = true;
+    let scanner = null;
 
-    scanner.render(
-      (decodedText) => {
-        // Success callback
-        scanner.pause();
-        handleBarcodeAnalyze(decodedText);
-      },
-      (err) => {
-        // Ignored errors for continuous scanning
-      }
-    );
+    // Check if media devices and cameras are supported/available
+    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+      navigator.mediaDevices.enumerateDevices()
+        .then(devices => {
+          if (!isMounted) return;
+          const cameras = devices.filter(d => d.kind === 'videoinput');
+          if (cameras.length === 0) {
+            setHasCamera(false);
+            setError("Webcam not detected. Please upload a photo of the label/barcode or enter the barcode manually.");
+          }
+        })
+        .catch(err => {
+          console.warn("Device enumeration error:", err);
+        });
+    } else {
+      setHasCamera(false);
+      setError("Webcam access not supported in this browser. Please use photo uploads.");
+    }
 
-    scannerRef.current = scanner;
+    // Only attempt scanner mount if a camera is present
+    const timer = setTimeout(() => {
+      if (!isMounted) return;
+
+      const container = document.getElementById("reader");
+      if (!container) return;
+
+      // Ensure clean DOM container
+      container.innerHTML = "";
+
+      scanner = new Html5QrcodeScanner(
+        "reader",
+        { 
+          fps: 10, 
+          qrbox: { width: 250, height: 150 },
+          supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+          rememberLastUsedCamera: true
+        },
+        false
+      );
+
+      scanner.render(
+        (decodedText) => {
+          scanner.pause();
+          handleBarcodeAnalyze(decodedText);
+        },
+        (err) => {
+          if (err && typeof err === 'string' && err.includes("Requested device not found")) {
+            if (isMounted) {
+              setHasCamera(false);
+              setError("Camera not found or access denied.");
+            }
+          }
+        }
+      );
+
+      scannerRef.current = scanner;
+    }, 150);
 
     return () => {
-      if (scannerRef.current) {
-        scannerRef.current.clear().catch(e => console.error(e));
+      isMounted = false;
+      clearTimeout(timer);
+      if (scanner) {
+        scanner.clear().catch(e => console.error("Error clearing scanner on unmount:", e));
       }
     };
   }, []);
@@ -60,7 +101,6 @@ const Scan = () => {
     if (!bc) return;
     setIsScanning(true);
     setError('');
-    // Navigate directly — Results page fetches from Open Food Facts by barcode
     setScanDone(true);
     setTimeout(() => {
       if (scannerRef.current) {
@@ -70,13 +110,46 @@ const Scan = () => {
     }, 900);
   };
 
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    setError('');
+
+    if (scannerRef.current) {
+      try {
+        scannerRef.current.clear().catch(() => {});
+      } catch (_) {}
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const { data } = await scanAPI.scanImage(formData);
+      if (data && data.scan && data.scan.id) {
+        setScanDone(true);
+        setTimeout(() => {
+          navigate(`/results/${data.scan.id}`);
+        }, 900);
+      } else {
+        throw new Error('Scan failed to return valid data');
+      }
+    } catch (err) {
+      console.error('OCR label scan error:', err);
+      setError(err.response?.data?.message || 'Failed to analyze label image. Please check your internet or billing and try again.');
+      setIsUploading(false);
+    }
+  };
+
   return (
     <PageWrapper className="bg-gray-50 pb-24">
       {/* Header */}
       <div className="bg-white pt-14 pb-4 px-6 flex items-center justify-between shadow-sm">
         <div>
-          <h1 className="text-2xl font-black text-gray-900 mb-1 leading-tight">Barcode Scanner</h1>
-          <p className="text-gray-400 text-sm">Scan any packed product for a health grade</p>
+          <h1 className="text-2xl font-black text-gray-900 mb-1 leading-tight">Product Scanner</h1>
+          <p className="text-gray-400 text-sm">Scan barcode or upload nutritional label</p>
         </div>
         <button onClick={() => navigate(-1)} className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors">
           <ArrowLeft size={20} />
@@ -94,7 +167,17 @@ const Scan = () => {
         {/* Live Camera Scanner Box */}
         <div className="w-full bg-white rounded-[2.5rem] relative overflow-hidden shadow-sm border border-gray-100 p-2 sm:p-4 min-h-[350px] flex flex-col justify-center">
           
-          <div id="reader" className="w-full rounded-2xl overflow-hidden [&_video]:rounded-2xl [&_#reader__dashboard_section_csr]:mt-4 [&_button]:bg-purple-600 [&_button]:text-white [&_button]:px-4 [&_button]:py-2 [&_button]:rounded-xl [&_button]:font-bold [&_button]:border-none"></div>
+          {hasCamera ? (
+            <div id="reader" className="w-full rounded-2xl overflow-hidden [&_video]:rounded-2xl [&_#reader__dashboard_section_csr]:mt-4 [&_button]:bg-purple-600 [&_button]:text-white [&_button]:px-4 [&_button]:py-2 [&_button]:rounded-xl [&_button]:font-bold [&_button]:border-none"></div>
+          ) : (
+            <div className="text-center py-12 px-6">
+              <div className="w-20 h-20 bg-purple-50 rounded-[2rem] flex items-center justify-center mx-auto mb-5 text-4xl shadow-inner shadow-purple-600/5">📷</div>
+              <h3 className="font-black text-gray-800 text-base mb-1">Webcam Not Detected</h3>
+              <p className="text-gray-400 text-xs font-bold max-w-xs mx-auto leading-relaxed">
+                No active webcam was found. Take or upload a photo of the product label/barcode, or use manual entry below!
+              </p>
+            </div>
+          )}
 
           <AnimatePresence>
             {isScanning && !scanDone && (
@@ -104,8 +187,18 @@ const Scan = () => {
                   <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center shadow-2xl mx-auto mb-6 animate-bounce">
                     <Zap size={36} className="text-purple-600" />
                   </div>
-                  <h3 className="text-white font-black text-xl mb-1">Analyzing...</h3>
+                  <h3 className="text-white font-black text-xl mb-1">Analyzing Barcode...</h3>
                   <p className="text-white/60 text-xs font-bold uppercase tracking-widest">Fetching Science Data</p>
+                </div>
+              </motion.div>
+            )}
+            {isUploading && !scanDone && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-purple-900/60 backdrop-blur-md z-20 flex flex-col items-center justify-center rounded-[2.5rem]">
+                <div className="text-center">
+                  <Loader2 size={40} className="animate-spin text-white mx-auto mb-4"/>
+                  <h3 className="text-white font-black text-xl mb-1">Analyzing Label...</h3>
+                  <p className="text-white/60 text-xs font-bold uppercase tracking-widest">Extracting Nutrition Details</p>
                 </div>
               </motion.div>
             )}
@@ -116,12 +209,38 @@ const Scan = () => {
                   <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', damping: 10 }}>
                     <CheckCircle size={100} className="text-white mx-auto mb-6" />
                   </motion.div>
-                  <h3 className="text-white font-black text-2xl">Product Identified!</h3>
-                  <p className="text-white/80 font-bold mt-2">Redirecting to Analysis...</p>
+                  <h3 className="text-white font-black text-2xl">Analysis Complete!</h3>
+                  <p className="text-white/80 font-bold mt-2">Redirecting to Results...</p>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
+        </div>
+
+        {/* Photo Upload & Capture Trigger */}
+        <div className="mt-4 flex gap-3">
+          <label className="flex-1 bg-white border border-gray-100 rounded-2xl py-4 px-6 flex items-center justify-center gap-3 cursor-pointer shadow-sm hover:shadow-md hover:border-purple-200 transition-all font-bold text-gray-700 text-sm">
+            <Upload size={18} className="text-purple-600" />
+            <span>Upload Label</span>
+            <input 
+              type="file" 
+              accept="image/*" 
+              onChange={handlePhotoUpload} 
+              className="hidden" 
+            />
+          </label>
+          
+          <label className="flex-1 bg-white border border-gray-100 rounded-2xl py-4 px-6 flex items-center justify-center gap-3 cursor-pointer shadow-sm hover:shadow-md hover:border-purple-200 transition-all font-bold text-gray-700 text-sm">
+            <Camera size={18} className="text-purple-600" />
+            <span>Take Photo (OCR)</span>
+            <input 
+              type="file" 
+              accept="image/*" 
+              capture="environment"
+              onChange={handlePhotoUpload} 
+              className="hidden" 
+            />
+          </label>
         </div>
 
         {/* Manual Input */}

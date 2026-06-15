@@ -38,7 +38,7 @@ const Categories = () => {
               >
                 <div className="flex items-center gap-4">
                   <div className={`w-14 h-14 rounded-2xl overflow-hidden shadow-inner`}>
-                    <img src={cat.image} alt={cat.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    <img src={cat.image} alt={cat.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=200&q=80'; }}/>
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900">{cat.name}</h3>
