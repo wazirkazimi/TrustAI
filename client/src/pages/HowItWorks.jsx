@@ -10,8 +10,8 @@ const steps = [
     color: 'from-purple-500 to-purple-700', light: 'bg-purple-50 border-purple-100 text-purple-600',
   },
   {
-    num: '02', icon: Star, title: 'See the FoodTrust Rating',
-    desc: 'FoodTrust Rating is independent, unbiased, and expert-backed. Understand exactly why the product is rated so with concerns mentioned clearly.',
+    num: '02', icon: Star, title: 'See the TrueBite Rating',
+    desc: 'TrueBite Rating is independent, unbiased, and expert-backed. Understand exactly why the product is rated so with concerns mentioned clearly.',
     details: ['Get a score from 0–10 instantly','See FSSAI compliance status','View processing level & additives','Understand what\'s good and bad'],
     color: 'from-amber-400 to-orange-500', light: 'bg-amber-50 border-amber-100 text-amber-600',
   },
@@ -38,7 +38,7 @@ export default function HowItWorks() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center"><span className="text-white font-black text-xs">FT</span></div>
-            <span className="font-black text-lg">FoodTrust <span className="text-purple-600">AI</span></span>
+            <span className="font-black text-lg">TrueBite <span className="text-purple-600">AI</span></span>
           </Link>
           <div className="hidden md:flex items-center gap-8">
             <Link to="/" className="text-sm font-semibold text-gray-600 hover:text-purple-600">Home</Link>
@@ -59,7 +59,7 @@ export default function HowItWorks() {
               How it works —<br/><span className="text-purple-600">3 easy steps</span>
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              Getting started with FoodTrust AI is simple and quick. Follow these three steps to make informed, healthier choices for you and your family.
+              Getting started with TrueBite is simple and quick. Follow these three steps to make informed, healthier choices for you and your family.
             </p>
           </motion.div>
         </div>
@@ -152,7 +152,7 @@ export default function HowItWorks() {
               Personalized Insights<br/><span className="text-purple-600">For Your Health Needs</span>
             </h2>
             <p className="text-gray-600 leading-relaxed mb-6">
-              FoodTrust AI goes beyond general ratings, factoring in your diet, health conditions like diabetes, obesity, and more.
+              TrueBite goes beyond general ratings, factoring in your diet, health conditions like diabetes, obesity, and more.
             </p>
             {[
               { t: 'Personalized Flags', d: 'Know instantly if a product suits your profile with clear flags on whether a product matches your health needs.' },
@@ -203,7 +203,7 @@ export default function HowItWorks() {
       </section>
 
       <footer className="bg-gray-900 text-gray-400 py-8 px-4 sm:px-6 text-center">
-        <p className="text-sm">Built with ❤️ for India 🇮🇳 · © 2026 FoodTrust AI</p>
+        <p className="text-sm">Built with ❤️ for India 🇮🇳 · © 2026 TrueBite</p>
       </footer>
     </div>
   );

@@ -9,19 +9,19 @@ const api = axios.create({
 
 // Attach JWT token to every request if available
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('foodtrust_token');
+  const token = localStorage.getItem('truebite_token');
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
-// Handle 401 globally — clear token and redirect to login
+// Handle 401 globally — clear token so AuthContext picks up the change
 api.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
-      localStorage.removeItem('foodtrust_token');
-      localStorage.removeItem('foodtrust_user');
-      window.location.href = '/';
+      localStorage.removeItem('truebite_token');
+      localStorage.removeItem('truebite_user');
+      // Don't force redirect here — let individual pages/AuthContext handle navigation
     }
     return Promise.reject(err);
   }

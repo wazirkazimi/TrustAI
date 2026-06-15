@@ -10,8 +10,8 @@ export const AuthProvider = ({ children }) => {
 
   // Restore session from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem('foodtrust_user');
-    const token  = localStorage.getItem('foodtrust_token');
+    const stored = localStorage.getItem('truebite_user');
+    const token  = localStorage.getItem('truebite_token');
     if (stored && token) {
       try { setUser(JSON.parse(stored)); } catch (_) {}
     }
@@ -20,8 +20,8 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const { data } = await authAPI.login({ email, password });
-    localStorage.setItem('foodtrust_token', data.token);
-    localStorage.setItem('foodtrust_user', JSON.stringify(data));
+    localStorage.setItem('truebite_token', data.token);
+    localStorage.setItem('truebite_user', JSON.stringify(data));
     setUser(data);
     toast.success(`Welcome back, ${data.name}! 👋`);
     return data;
@@ -29,16 +29,16 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     const { data } = await authAPI.register(userData);
-    localStorage.setItem('foodtrust_token', data.token);
-    localStorage.setItem('foodtrust_user', JSON.stringify(data));
+    localStorage.setItem('truebite_token', data.token);
+    localStorage.setItem('truebite_user', JSON.stringify(data));
     setUser(data);
     toast.success(`Account created! Welcome, ${data.name} 🎉`);
     return data;
   };
 
   const logout = () => {
-    localStorage.removeItem('foodtrust_token');
-    localStorage.removeItem('foodtrust_user');
+    localStorage.removeItem('truebite_token');
+    localStorage.removeItem('truebite_user');
     setUser(null);
     toast('Signed out successfully', { icon: '👋' });
   };
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
   const updateUserLocal = (updates) => {
     const updated = { ...user, ...updates };
     setUser(updated);
-    localStorage.setItem('foodtrust_user', JSON.stringify(updated));
+    localStorage.setItem('truebite_user', JSON.stringify(updated));
   };
 
   return (

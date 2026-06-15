@@ -1,12 +1,12 @@
-# FoodTrust AI: Scan. Verify. Trust.
+# TrueBite: Scan. Verify. Trust.
 
-FoodTrust AI is a premium, fully responsive (desktop and mobile) web application designed to empower Indian consumers with science-backed food transparency. By scanning product labels or live barcodes, users receive unbiased health ratings, FSSAI verification status, and personalized nutritional analysis tailored to their specific metabolic goals (Diabetic, Weight Loss, Gym Mode, etc.).
+TrueBite is a premium, fully responsive (desktop and mobile) web application designed to empower Indian consumers with science-backed food transparency. By scanning product labels or live barcodes, users receive unbiased health ratings, FSSAI verification status, and personalized nutritional analysis tailored to their specific metabolic goals (Diabetic, Weight Loss, Gym Mode, etc.).
 
 ---
 
-## 👥 The Experts Behind FoodTrust AI
+## 👥 The Experts Behind TrueBite
 
-FoodTrust AI was built with a foundation of food science, consumer health, and clinical dietetics:
+TrueBite was built with a foundation of food science, consumer health, and clinical dietetics:
 - **Wazir Kazimi** – Co-Founder & CEO (10+ years in Food Science, Consumer Health, and Policy)
 - **Jyotsna Bannur** – Co-Founder & Head of Nutrition (14 years in Clinical Dietetics, Metabolic Syndrome, and Wellness)
 
@@ -17,7 +17,7 @@ FoodTrust AI was built with a foundation of food science, consumer health, and c
 - **Live Barcode Scanning (Desktop & Mobile)**: Utilizing `html5-qrcode`, users can instantly scan barcodes using their desktop webcams or mobile cameras.
 - **Indian Market Focus**: Integrated with the Open Food Facts API (filtered for Indian products) to reliably fetch real-world product data, images, and ingredients.
 - **Personalized Health Onboarding**: A multi-step registration survey configures the user's profile (Age, Goal, Allergies, Vegan Mode) to provide highly personalized food ratings.
-- **Global Grading Standards**: Analyzes products based on 4 distinct health grading systems (FoodTrust Custom, EU Nutri-Score, Singapore Nutri-Grade, and Japanese Balance).
+- **Global Grading Standards**: Analyzes products based on 4 distinct health grading systems (TrueBite Custom, EU Nutri-Score, Singapore Nutri-Grade, and Japanese Balance).
 - **Smart Stricter Algorithms**: Advanced logic distinguishes between solid foods and liquids, heavily penalizing high-sugar and high-calorie beverages (e.g., carbonated sodas).
 - **Smart Swaps**: Recommends healthier, locally available alternatives for unhealthy or ultra-processed products.
 - **FSSAI Verification**: Instantly checks if a product's license is valid and provides a direct link to report non-compliant products to the FSSAI portal.
@@ -27,9 +27,9 @@ FoodTrust AI was built with a foundation of food science, consumer health, and c
 
 ## 🧠 Grading System: How it Works
 
-FoodTrust AI uses a weighted algorithm that aggregates four global standards to provide a comprehensive **FoodTrust Rating**.
+TrueBite uses a weighted algorithm that aggregates four global standards to provide a comprehensive **TrueBite Rating**.
 
-### 1. Custom FoodTrust Score (0–10)
+### 1. Custom TrueBite Score (0–10)
 Our proprietary system designed specifically for the Indian diet.
 - **Penalties**: Strict penalties for high sugar (>5g/10g/20g limits), saturated fat (>3g), trans fat (>0g), and high calories.
 - **Personalization**:

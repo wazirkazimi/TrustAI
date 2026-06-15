@@ -189,13 +189,13 @@ export default function Results() {
             {activeTab === 'basic' ? (
               <motion.div key="basic" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
 
-                {/* FoodTrust Rating */}
+                {/* TrueBite Rating */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex items-center gap-4">
                   <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md shadow-purple-600/30">
                     <span className="text-white font-black text-sm">FT</span>
                   </div>
                   <div className="flex-1">
-                    <p className="font-black text-gray-900 text-sm">FoodTrust Rating</p>
+                    <p className="font-black text-gray-900 text-sm">TrueBite Rating</p>
                     <p className="text-xs text-gray-400 mt-0.5">Based on 4 global grading systems</p>
                   </div>
                   <div className="text-right flex-shrink-0">

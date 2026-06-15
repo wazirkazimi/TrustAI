@@ -9,9 +9,7 @@ const experts = [
     exp: '10+ years',
     rating: '5.0',
     reviews: '1.2k',
-    specialties: ['Food Science', 'Consumer Health', 'Policy'],
-    image: 'https://images.unsplash.com/photo-1559839734-2b71f1536783?auto=format&fit=crop&w=200&q=80',
-    price: 'Free Consultation',
+    image: 'https://ui-avatars.com/api/?name=Wazir+Kazimi&background=9333ea&color=fff&size=200',
   },
   {
     name: 'Jyotsna Bannur',
@@ -20,7 +18,7 @@ const experts = [
     rating: '5.0',
     reviews: '520',
     specialties: ['Clinical Dietetics', 'Metabolic Syndrome', 'Wellness'],
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+    image: 'https://ui-avatars.com/api/?name=Jyotsna+Bannur&background=f59e0b&color=fff&size=200',
     price: '₹899/session',
   },
 ];

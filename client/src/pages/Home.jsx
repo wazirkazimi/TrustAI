@@ -17,12 +17,12 @@ const categories = [
 ];
 
 const trending = [
-  { barcode: '3017620422003', name: 'Nutella Hazelnut Spread', brand: 'Ferrero', grade: 'E', gradeColor: 'bg-red-600', score: '1.8', scoreColor: 'text-red-600', img: 'https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.820.400.jpg' },
-  { barcode: '5449000000996', name: 'Coca-Cola', brand: 'The Coca-Cola Company', grade: 'E', gradeColor: 'bg-red-600', score: '1.2', scoreColor: 'text-red-600', img: 'https://images.openfoodfacts.org/images/products/544/900/000/0996/front_en.1118.400.jpg' },
-  { barcode: '5000159461122', name: 'Kit Kat 4 Finger', brand: 'Nestle', grade: 'D', gradeColor: 'bg-orange-500', score: '2.8', scoreColor: 'text-orange-500', img: 'https://images.openfoodfacts.org/images/products/500/015/946/1122/front_en.216.400.jpg' },
-  { barcode: '028400064057', name: "Lay's Classic Chips", brand: 'Frito-Lay', grade: 'D', gradeColor: 'bg-orange-500', score: '3.0', scoreColor: 'text-orange-500', img: 'https://images.openfoodfacts.org/images/products/002/840/006/4057/front_en.14.400.jpg' },
-  { barcode: '038000845093', name: 'Pringles Original', brand: 'Kelloggs', grade: 'D', gradeColor: 'bg-orange-500', score: '2.5', scoreColor: 'text-orange-500', img: 'https://images.openfoodfacts.org/images/products/003/800/084/5093/front_en.30.400.jpg' },
-  { barcode: '070221007432', name: 'Oreo Chocolate Cookies', brand: 'Nabisco', grade: 'E', gradeColor: 'bg-red-600', score: '2.0', scoreColor: 'text-red-500', img: 'https://images.openfoodfacts.org/images/products/007/022/100/7432/front_en.11.400.jpg' },
+  { barcode: '3017620422003', name: 'Nutella Hazelnut Spread', brand: 'Ferrero', grade: 'E', gradeColor: 'bg-red-600', score: '1.8', scoreColor: 'text-red-600', img: 'https://placehold.co/400x400/9333ea/ffffff?text=Nutella' },
+  { barcode: '5449000000996', name: 'Coca-Cola', brand: 'The Coca-Cola Company', grade: 'E', gradeColor: 'bg-red-600', score: '1.2', scoreColor: 'text-red-600', img: 'https://placehold.co/400x400/dc2626/ffffff?text=Coca-Cola' },
+  { barcode: '5000159461122', name: 'Kit Kat 4 Finger', brand: 'Nestle', grade: 'D', gradeColor: 'bg-orange-500', score: '2.8', scoreColor: 'text-orange-500', img: 'https://placehold.co/400x400/ea580c/ffffff?text=Kit+Kat' },
+  { barcode: '028400064057', name: "Lay's Classic Chips", brand: 'Frito-Lay', grade: 'D', gradeColor: 'bg-orange-500', score: '3.0', scoreColor: 'text-orange-500', img: 'https://placehold.co/400x400/eab308/ffffff?text=Lays' },
+  { barcode: '038000845093', name: 'Pringles Original', brand: 'Kelloggs', grade: 'D', gradeColor: 'bg-orange-500', score: '2.5', scoreColor: 'text-orange-500', img: 'https://placehold.co/400x400/ea580c/ffffff?text=Pringles' },
+  { barcode: '070221007432', name: 'Oreo Chocolate Cookies', brand: 'Nabisco', grade: 'E', gradeColor: 'bg-red-600', score: '2.0', scoreColor: 'text-red-500', img: 'https://placehold.co/400x400/2563eb/ffffff?text=Oreo' },
 ];
 
 export default function Home() {

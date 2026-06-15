@@ -28,7 +28,7 @@ export default function About() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center"><span className="text-white font-black text-xs">FT</span></div>
-            <span className="font-black text-lg">FoodTrust <span className="text-purple-600">AI</span></span>
+            <span className="font-black text-lg">TrueBite <span className="text-purple-600">AI</span></span>
           </Link>
           <div className="hidden md:flex items-center gap-8">
             <Link to="/" className="text-sm font-semibold text-gray-600 hover:text-purple-600">Home</Link>
@@ -49,7 +49,7 @@ export default function About() {
               Independent.<br/><span className="text-purple-600">Unbiased.</span><br/>Science-backed.
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              FoodTrust AI is transforming the way Indian consumers choose packaged foods by offering clear, trustworthy, and science-backed insights on every product label.
+              TrueBite is transforming the way Indian consumers choose packaged foods by offering clear, trustworthy, and science-backed insights on every product label.
             </p>
           </motion.div>
         </div>
@@ -94,9 +94,9 @@ export default function About() {
       <section className="py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <motion.div initial={{opacity:0,x:-40}} whileInView={{opacity:1,x:0}} viewport={{once:true}} transition={{duration:0.5}}>
-            <h2 className="text-4xl font-black mb-5">Why We Built<br/><span className="text-purple-600">FoodTrust AI</span></h2>
+            <h2 className="text-4xl font-black mb-5">Why We Built<br/><span className="text-purple-600">TrueBite</span></h2>
             <p className="text-gray-600 leading-relaxed mb-4">Most Indians can't decode complex nutrition labels. Brands use misleading claims like "healthy", "natural", and "fortified" to confuse consumers.</p>
-            <p className="text-gray-600 leading-relaxed mb-4">We built FoodTrust AI to cut through that noise — using OCR scanning, FSSAI compliance verification, and 4 international grading standards.</p>
+            <p className="text-gray-600 leading-relaxed mb-4">We built TrueBite to cut through that noise — using OCR scanning, FSSAI compliance verification, and 4 international grading standards.</p>
             <p className="text-gray-600 leading-relaxed mb-8"><strong>No brand influence. No paid promotions. Just pure science.</strong></p>
             <Link to="/rating-system" className="inline-flex items-center gap-2 bg-purple-600 text-white font-bold px-7 py-3.5 rounded-2xl shadow-lg shadow-purple-600/25 hover:bg-purple-700 transition-all">
               See How We Rate <ArrowRight size={18}/>
@@ -152,14 +152,14 @@ export default function About() {
       {/* CTA */}
       <section className="py-20 px-4 sm:px-6 bg-purple-600 text-center text-white">
         <h2 className="text-3xl font-black mb-3">Ready to make smarter food choices?</h2>
-        <p className="text-purple-200 mb-8 max-w-md mx-auto">Join 1M+ Indians who trust FoodTrust AI for honest, science-backed food ratings.</p>
+        <p className="text-purple-200 mb-8 max-w-md mx-auto">Join 1M+ Indians who trust TrueBite for honest, science-backed food ratings.</p>
         <Link to="/home" className="inline-flex items-center gap-2 bg-white text-purple-600 font-black px-8 py-4 rounded-2xl shadow-xl hover:shadow-2xl transition-all hover:scale-105">
           Start Scanning Free <ArrowRight size={18}/>
         </Link>
       </section>
 
       <footer className="bg-gray-900 text-gray-400 py-8 px-4 sm:px-6 text-center">
-        <p className="text-sm">Built with ❤️ for India 🇮🇳 · © 2026 FoodTrust AI — By Wazir Kazimi & Jyotsna Bannur</p>
+        <p className="text-sm">Built with ❤️ for India 🇮🇳 · © 2026 TrueBite — By Wazir Kazimi & Jyotsna Bannur</p>
       </footer>
     </div>
   );

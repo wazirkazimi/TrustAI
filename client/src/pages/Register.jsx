@@ -18,7 +18,7 @@ const Register = () => {
     age: '',
     goal: 'Balanced',
     dietaryAllowances: [],
-    gradingSystem: 'FoodTrust (AI)',
+    gradingSystem: 'TrueBite (AI)',
     isVegan: 'No'
   });
 
@@ -27,8 +27,8 @@ const Register = () => {
 
   const systems = [
     {
-      id: 'FoodTrust (AI)',
-      name: 'FoodTrust (AI)',
+      id: 'TrueBite (AI)',
+      name: 'TrueBite (AI)',
       desc: 'Our proprietary Indian-focused system.',
       details: 'Evaluates products based on 4 global standards, penalizing high sugar/fat and rewarding fiber/protein. Personalized to your metabolic profile (Diabetic, Gym, etc.).',
       icon: '🛡️'
@@ -333,7 +333,7 @@ const Register = () => {
                 </motion.div>
               </div>
 
-              <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 tracking-tighter leading-tight">Welcome to the<br /><span className="text-purple-600">TrustAI Elite.</span></h1>
+              <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 tracking-tighter leading-tight">Welcome to the<br /><span className="text-purple-600">TrueBite Elite.</span></h1>
               <p className="text-gray-500 font-bold mb-12 max-w-sm mx-auto leading-relaxed">
                 Your personalized transparency engine is primed and ready. Science is now on your side.
               </p>

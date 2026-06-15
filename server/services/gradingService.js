@@ -1,6 +1,6 @@
 /**
  * gradingService.js
- * All 4 health grading algorithms for FoodTrust AI
+ * All 4 health grading algorithms for TrueBite
  */
 
 /**

@@ -12,6 +12,19 @@ exports.register = async (req, res) => {
     if (!name || !email || !password)
       return res.status(400).json({ message: 'All fields are required' });
 
+    // Mock fallback if using dummy Supabase URL
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('aloesbmeqimvyprkljpy')) {
+      console.warn('⚠️ Using Mock Database for Registration (Dummy Supabase URL detected)');
+      return res.status(201).json({
+        id: 'mock-uuid-1234',
+        name,
+        email: email.toLowerCase(),
+        healthMode: 'default',
+        vegFilter: isVegan === 'Yes',
+        token: generateToken('mock-uuid-1234'),
+      });
+    }
+
     // Check if user exists
     const { data: existingUser } = await supabase
       .from('users')
@@ -35,7 +48,7 @@ exports.register = async (req, res) => {
           password: hashedPassword,
           age: parseInt(age) || null,
           goal: goal || 'Balanced',
-          grading_system: gradingSystem || 'FoodTrust (AI)',
+          grading_system: gradingSystem || 'TrueBite (AI)',
           veg_filter: isVegan === 'Yes'
         }
       ])
@@ -63,6 +76,19 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password)
       return res.status(400).json({ message: 'Email and password are required' });
+
+    // Mock fallback if using dummy Supabase URL
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('aloesbmeqimvyprkljpy')) {
+      console.warn('⚠️ Using Mock Database for Login (Dummy Supabase URL detected)');
+      return res.json({
+        id: 'mock-uuid-1234',
+        name: 'Demo User',
+        email: email.toLowerCase(),
+        healthMode: 'default',
+        vegFilter: false,
+        token: generateToken('mock-uuid-1234'),
+      });
+    }
 
     const { data: user, error } = await supabase
       .from('users')
@@ -93,6 +119,18 @@ exports.login = async (req, res) => {
 // GET /api/auth/me
 exports.getMe = async (req, res) => {
   try {
+    // Mock fallback if using dummy Supabase URL
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('aloesbmeqimvyprkljpy')) {
+      return res.json({
+        id: req.user.id,
+        name: 'Demo User',
+        email: 'demo@example.com',
+        healthMode: 'default',
+        vegFilter: false,
+        bookmarksCount: 5
+      });
+    }
+
     const { data: user, error } = await supabase
       .from('users')
       .select('id, name, email, health_mode, veg_filter')

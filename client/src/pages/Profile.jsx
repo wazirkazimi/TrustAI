@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { authAPI, userAPI } from '../utils/api';
 import { ChevronRight, ScanLine, BookmarkIcon, AlertTriangle, LogOut, Heart, Zap, Loader2 } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
@@ -12,6 +13,7 @@ const healthModes = [
 ];
 
 const Profile = () => {
+  const { user: authUser, logout, loading: authLoading } = useAuth();
   const [user, setUser] = useState(null);
   const [activeMode, setActiveMode] = useState('default');
   const [isVeg, setIsVeg] = useState(false);
@@ -20,6 +22,22 @@ const Profile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Wait for AuthContext to finish loading
+    if (authLoading) return;
+
+    // If there is no cached user session at all, redirect to login
+    if (!authUser) {
+      navigate('/login');
+      return;
+    }
+
+    // Immediately populate from cached AuthContext data so the page renders instantly
+    setUser(authUser);
+    setActiveMode(authUser.healthMode || 'default');
+    setIsVeg(authUser.vegFilter || false);
+    setLoading(false);
+
+    // Then try to enrich with fresh data from the API (bookmarks count, etc.)
     const fetchProfile = async () => {
       try {
         const { data } = await authAPI.getMe();
@@ -27,14 +45,12 @@ const Profile = () => {
         setActiveMode(data.healthMode || 'default');
         setIsVeg(data.vegFilter || false);
       } catch (err) {
-        console.error('Profile fetch error:', err);
-        navigate('/login');
-      } finally {
-        setLoading(false);
+        // API failed (e.g. Supabase unreachable) — keep using cached data, don't redirect
+        console.warn('Could not refresh profile from server, using cached data:', err.message);
       }
     };
     fetchProfile();
-  }, [navigate]);
+  }, [authUser, authLoading, navigate]);
 
   const updateMode = async (modeId) => {
     setActiveMode(modeId);
@@ -62,8 +78,7 @@ const Profile = () => {
   };
 
   const handleSignOut = () => {
-    localStorage.removeItem('foodtrust_token');
-    localStorage.removeItem('foodtrust_user');
+    logout();
     navigate('/');
   };
 
@@ -189,7 +204,7 @@ const Profile = () => {
           onClick={handleSignOut}
           className="w-full flex items-center justify-center gap-3 py-5 rounded-[2rem] border-2 border-red-50 text-red-500 font-black text-sm bg-red-50/30 hover:bg-red-50 hover:border-red-100 transition-all active:scale-[0.98]"
         >
-          <LogOut size={20} /> Sign Out of TrustAI
+          <LogOut size={20} /> Sign Out of TrueBite
         </button>
       </div>
     </PageWrapper>

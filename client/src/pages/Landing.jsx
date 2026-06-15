@@ -15,9 +15,9 @@ export default function Landing() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-black text-xs">FT</span>
+              <span className="text-white font-black text-xs">TB</span>
             </div>
-            <span className="font-black text-lg text-gray-900">FoodTrust <span className="text-purple-600">AI</span></span>
+            <span className="font-black text-lg text-gray-900">TrueBite <span className="text-purple-600">AI</span></span>
           </div>
 
           <div className="hidden md:flex items-center gap-8">
@@ -115,10 +115,10 @@ export default function Landing() {
               </div>
               <div className="mx-4 mb-3 bg-white rounded-2xl shadow border border-gray-100 p-3 flex items-center gap-3">
                 <div className="w-10 h-10 bg-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span className="text-white font-black text-xs">FT</span>
+                  <span className="text-white font-black text-xs">TB</span>
                 </div>
                 <div className="flex-1">
-                  <p className="font-bold text-gray-900 text-xs">FoodTrust Rating</p>
+                  <p className="font-bold text-gray-900 text-xs">TrueBite Rating</p>
                   <p className="text-[10px] text-gray-400">Click to know more</p>
                 </div>
                 <div className="bg-amber-400 px-2 py-1 rounded-lg text-center">
@@ -149,7 +149,7 @@ export default function Landing() {
             <h2 className="text-4xl font-black mb-3">
               How it works — <span className="text-purple-600">3 easy steps</span>
             </h2>
-            <p className="text-gray-500 max-w-lg mx-auto">Getting started with FoodTrust AI is simple and quick. Follow these three steps to make informed, healthier choices.</p>
+            <p className="text-gray-500 max-w-lg mx-auto">Getting started with TrueBite is simple and quick. Follow these three steps to make informed, healthier choices.</p>
           </div>
 
           <div className="relative">
@@ -158,7 +158,7 @@ export default function Landing() {
 
             {[
               { num:'01', title:'Scan or Search', desc:'Scan the barcode of the product or simply search its name. Works on any packaged food sold in India.', img:'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=300&q=80', align:'left' },
-              { num:'02', title:'See the FoodTrust Rating', desc:'FoodTrust Rating is independent, unbiased, and expert-backed. Understand why the product is rated so with concerns mentioned clearly.', img:'https://images.unsplash.com/photo-1622484211148-71ee525d5022?auto=format&fit=crop&w=300&q=80', align:'right' },
+              { num:'02', title:'See the TrueBite Rating', desc:'TrueBite Rating is independent, unbiased, and expert-backed. Understand why the product is rated so with concerns mentioned clearly.', img:'https://images.unsplash.com/photo-1622484211148-71ee525d5022?auto=format&fit=crop&w=300&q=80', align:'right' },
               { num:'03', title:'Discover Better Rated Products', desc:'Scroll further to find the better-rated products from the same category — healthier alternatives suggested instantly.', img:'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=300&q=80', align:'left' },
             ].map((step, i) => (
               <motion.div key={i} initial={{opacity:0, x: step.align==='left'?-40:40}} whileInView={{opacity:1,x:0}} viewport={{once:true}} transition={{duration:0.5, delay:0.1}}
@@ -234,8 +234,8 @@ export default function Landing() {
             <h2 className="text-4xl font-black mb-4 leading-tight">
               Independent.<br/>Unbiased.<br/><span className="text-purple-600">Science-backed.</span>
             </h2>
-            <p className="text-gray-600 leading-relaxed mb-5">FoodTrust AI is transforming the way people choose packaged foods by offering clear, trustworthy, and science-backed insights on every product label.</p>
-            <p className="text-gray-600 leading-relaxed mb-8">That's why a growing community trusts FoodTrust AI to navigate the complexities of labels and make better choices, every day.</p>
+            <p className="text-gray-600 leading-relaxed mb-5">TrueBite is transforming the way people choose packaged foods by offering clear, trustworthy, and science-backed insights on every product label.</p>
+            <p className="text-gray-600 leading-relaxed mb-8">That's why a growing community trusts TrueBite to navigate the complexities of labels and make better choices, every day.</p>
             <button onClick={() => setAuthMode('register')}
               className="flex items-center gap-2 bg-purple-600 text-white font-bold px-7 py-3.5 rounded-2xl shadow-lg shadow-purple-600/25 hover:bg-purple-700 transition-all">
               Join the Community <ArrowRight size={18}/>
@@ -283,7 +283,7 @@ export default function Landing() {
           <div className="mt-12 bg-purple-600 rounded-3xl p-8 text-white grid md:grid-cols-2 gap-8 items-center">
             <div>
               <h3 className="text-2xl font-black mb-3">Personalized Insights For Your Health Needs</h3>
-              <p className="text-purple-200 mb-5 leading-relaxed">FoodTrust AI factors in your diet, health conditions like diabetes, weight goals, and gym needs.</p>
+              <p className="text-purple-200 mb-5 leading-relaxed">TrueBite factors in your diet, health conditions like diabetes, weight goals, and gym needs.</p>
               {['Personalized Flags — instantly know if a product suits you','Tailored Recommendations — find healthier alternatives','Health Modes — Diabetic, Gym, Weight Loss, Default'].map((f,i)=>(
                 <div key={i} className="flex items-start gap-2 mb-2">
                   <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -315,11 +315,11 @@ export default function Landing() {
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-black text-xs">FT</span>
+              <span className="text-white font-black text-xs">TB</span>
             </div>
-            <span className="font-black text-white">FoodTrust AI</span>
+            <span className="font-black text-white">TrueBite</span>
           </div>
-          <p className="text-sm text-center">Built with ❤️ for India 🇮🇳 · MERN Stack · © 2026 FoodTrust AI</p>
+          <p className="text-sm text-center">Built with ❤️ for India 🇮🇳 · MERN Stack · © 2026 TrueBite</p>
           <button onClick={() => setAuthMode('register')}
             className="bg-purple-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-purple-700 transition-colors">
             Get Started Free
@@ -338,9 +338,9 @@ export default function Landing() {
             <div className="bg-purple-600 px-8 py-8 text-white">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-black text-xs">FT</span>
+                  <span className="text-white font-black text-xs">TB</span>
                 </div>
-                <span className="font-black text-lg">FoodTrust AI</span>
+                <span className="font-black text-lg">TrueBite</span>
               </div>
               <h2 className="text-2xl font-black">{authMode === 'login' ? 'Welcome back 👋' : 'Create account 🎉'}</h2>
               <p className="text-purple-200 text-sm mt-1">{authMode === 'login' ? 'Sign in to your account' : 'Start scanning for free'}</p>

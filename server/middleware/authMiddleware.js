@@ -13,6 +13,18 @@ const protect = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
+    // Mock fallback if using dummy Supabase URL
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('aloesbmeqimvyprkljpy')) {
+      req.user = {
+        id: decoded.id,
+        name: 'Demo User',
+        email: 'demo@example.com',
+        healthMode: 'default',
+        vegFilter: false
+      };
+      return next();
+    }
+
     const { data: user, error } = await supabase
       .from('users')
       .select('id, name, email, health_mode, veg_filter')
@@ -46,6 +58,18 @@ const optionalAuth = async (req, res, next) => {
     token = req.headers.authorization.split(' ')[1];
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      // Mock fallback if using dummy Supabase URL
+      if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('aloesbmeqimvyprkljpy')) {
+        req.user = {
+          id: decoded.id,
+          name: 'Demo User',
+          email: 'demo@example.com',
+          healthMode: 'default',
+          vegFilter: false
+        };
+        return next();
+      }
+
       const { data: user } = await supabase
         .from('users')
         .select('id, name, email, health_mode, veg_filter')

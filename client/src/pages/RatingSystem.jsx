@@ -58,7 +58,7 @@ export default function RatingSystem() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center"><span className="text-white font-black text-xs">FT</span></div>
-            <span className="font-black text-lg">FoodTrust <span className="text-purple-600">AI</span></span>
+            <span className="font-black text-lg">TrueBite <span className="text-purple-600">AI</span></span>
           </Link>
           <div className="hidden md:flex items-center gap-8">
             <Link to="/" className="text-sm font-semibold text-gray-600 hover:text-purple-600">Home</Link>
@@ -75,16 +75,16 @@ export default function RatingSystem() {
         <div className="max-w-4xl mx-auto text-center">
           <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
             <div className="inline-flex items-center bg-purple-100 border border-purple-200 px-4 py-1.5 rounded-full mb-6 text-purple-700 text-sm font-bold">
-              <Zap size={14} className="mr-1.5"/>FTRS — FoodTrust Rating System
+              <Zap size={14} className="mr-1.5"/>FTRS — TrueBite Rating System
             </div>
             <h1 className="text-5xl sm:text-6xl font-black leading-tight mb-5">
               What is <span className="text-purple-600">FTRS?</span>
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed mb-6">
-              FoodTrust gives every packaged food a simple, science-backed rating from 0 to 5, so you can quickly understand how healthy it really is.
+              TrueBite gives every packaged food a simple, science-backed rating from 0 to 5, so you can quickly understand how healthy it really is.
             </p>
             <p className="text-gray-500 max-w-2xl mx-auto leading-relaxed">
-              Unlike front-of-pack marketing claims, the FoodTrust Rating System (FTRS) looks deeper — evaluating a product's nutrition profile, ingredient health impact, processing level, and presence of potentially harmful additives. It cuts through misleading claims and shows you the <strong>real health impact</strong> of what you're eating.
+              Unlike front-of-pack marketing claims, the TrueBite Rating System (FTRS) looks deeper — evaluating a product's nutrition profile, ingredient health impact, processing level, and presence of potentially harmful additives. It cuts through misleading claims and shows you the <strong>real health impact</strong> of what you're eating.
             </p>
           </motion.div>
         </div>
@@ -113,7 +113,7 @@ export default function RatingSystem() {
           <motion.div initial={{opacity:0,x:40}} whileInView={{opacity:1,x:0}} viewport={{once:true}}
             className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden max-w-xs mx-auto w-full">
             <div className="bg-purple-600 px-5 py-4">
-              <p className="text-white/70 text-xs font-bold uppercase tracking-wider">FoodTrust Rating System</p>
+              <p className="text-white/70 text-xs font-bold uppercase tracking-wider">TrueBite Rating System</p>
               <div className="flex items-center justify-between mt-1">
                 <p className="text-white font-black text-2xl">The Whole Truth<br/>Hazelnut Cocoa</p>
                 <div className="bg-lime-400 px-3 py-2 rounded-xl text-center ml-3 flex-shrink-0">
@@ -151,7 +151,7 @@ export default function RatingSystem() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
             <h2 className="text-4xl font-black mb-3">How do we <span className="text-purple-600">rate?</span></h2>
-            <p className="text-gray-500 max-w-xl mx-auto">The FoodTrust Rating System is based on four core components, each designed to reflect a different aspect of a packaged food's overall health impact.</p>
+            <p className="text-gray-500 max-w-xl mx-auto">The TrueBite Rating System is based on four core components, each designed to reflect a different aspect of a packaged food's overall health impact.</p>
           </div>
 
           <div className="space-y-8">
@@ -208,7 +208,7 @@ export default function RatingSystem() {
           {/* Combined summary */}
           <div className="mt-10 bg-purple-600 rounded-3xl p-8 text-white text-center">
             <h3 className="text-2xl font-black mb-3">All 4 Grades. One Scan.</h3>
-            <p className="text-purple-200 max-w-lg mx-auto mb-6">FoodTrust AI is the only platform that combines FTRS + Nutri-Score + Nutri-Grade + JP Balance Score in a single scan — giving you the most comprehensive food health rating available anywhere.</p>
+            <p className="text-purple-200 max-w-lg mx-auto mb-6">TrueBite is the only platform that combines FTRS + Nutri-Score + Nutri-Grade + JP Balance Score in a single scan — giving you the most comprehensive food health rating available anywhere.</p>
             <Link to="/scan" className="inline-flex items-center gap-2 bg-white text-purple-600 font-black px-8 py-3.5 rounded-2xl shadow-xl hover:scale-105 transition-transform">
               Scan Your First Product <ArrowRight size={18}/>
             </Link>
@@ -217,7 +217,7 @@ export default function RatingSystem() {
       </section>
 
       <footer className="bg-gray-900 text-gray-400 py-8 px-4 sm:px-6 text-center">
-        <p className="text-sm">Built with ❤️ for India 🇮🇳 · © 2026 FoodTrust AI</p>
+        <p className="text-sm">Built with ❤️ for India 🇮🇳 · © 2026 TrueBite</p>
       </footer>
     </div>
   );
