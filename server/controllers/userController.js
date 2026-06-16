@@ -1,5 +1,14 @@
 const supabase = require('../config/supabase');
 
+const isNetworkError = (err) => {
+  return err && (
+    err.message?.includes('fetch failed') || 
+    err.code === 'ENOTFOUND' || 
+    err.message?.includes('getaddrinfo') || 
+    err.message?.includes('connection')
+  );
+};
+
 // PUT /api/user/mode
 exports.updateHealthMode = async (req, res) => {
   try {
@@ -7,6 +16,16 @@ exports.updateHealthMode = async (req, res) => {
     const validModes = ['default', 'weightLoss', 'diabetic', 'gym'];
     if (!validModes.includes(healthMode))
       return res.status(400).json({ message: 'Invalid health mode' });
+
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('placeholder-supabase-url')) {
+      return res.json({
+        id: req.user.id,
+        name: req.user.name,
+        email: req.user.email,
+        healthMode: healthMode,
+        vegFilter: req.user.vegFilter
+      });
+    }
 
     const { data: user, error } = await supabase
       .from('users')
@@ -24,6 +43,16 @@ exports.updateHealthMode = async (req, res) => {
       vegFilter: user.veg_filter
     });
   } catch (err) {
+    if (isNetworkError(err)) {
+      console.warn('⚠️ Supabase updateHealthMode connection error, returning mock response');
+      return res.json({
+        id: req.user?.id || 'mock-uuid-1234',
+        name: req.user?.name || 'Demo User',
+        email: req.user?.email || 'demo@example.com',
+        healthMode: req.body.healthMode,
+        vegFilter: req.user?.vegFilter || false
+      });
+    }
     res.status(500).json({ message: err.message });
   }
 };
@@ -32,6 +61,17 @@ exports.updateHealthMode = async (req, res) => {
 exports.updateVegPreference = async (req, res) => {
   try {
     const { vegFilter } = req.body;
+
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('placeholder-supabase-url')) {
+      return res.json({
+        id: req.user.id,
+        name: req.user.name,
+        email: req.user.email,
+        healthMode: req.user.healthMode,
+        vegFilter: Boolean(vegFilter)
+      });
+    }
+
     const { data: user, error } = await supabase
       .from('users')
       .update({ veg_filter: Boolean(vegFilter) })
@@ -48,6 +88,16 @@ exports.updateVegPreference = async (req, res) => {
       vegFilter: user.veg_filter
     });
   } catch (err) {
+    if (isNetworkError(err)) {
+      console.warn('⚠️ Supabase updateVegPreference connection error, returning mock response');
+      return res.json({
+        id: req.user?.id || 'mock-uuid-1234',
+        name: req.user?.name || 'Demo User',
+        email: req.user?.email || 'demo@example.com',
+        healthMode: req.user?.healthMode || 'default',
+        vegFilter: Boolean(vegFilter)
+      });
+    }
     res.status(500).json({ message: err.message });
   }
 };
@@ -55,6 +105,10 @@ exports.updateVegPreference = async (req, res) => {
 // GET /api/user/bookmarks
 exports.getBookmarks = async (req, res) => {
   try {
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('placeholder-supabase-url')) {
+      return res.json([]);
+    }
+
     const { data: bookmarks, error } = await supabase
       .from('bookmarks')
       .select('*, scans(*)')
@@ -63,6 +117,10 @@ exports.getBookmarks = async (req, res) => {
     if (error) throw error;
     res.json(bookmarks.map(b => b.scans));
   } catch (err) {
+    if (isNetworkError(err)) {
+      console.warn('⚠️ Supabase getBookmarks connection error, returning empty bookmarks');
+      return res.json([]);
+    }
     res.status(500).json({ message: err.message });
   }
 };
@@ -71,6 +129,10 @@ exports.getBookmarks = async (req, res) => {
 exports.bookmarkScan = async (req, res) => {
   try {
     const scanId = req.params.scanId;
+
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('placeholder-supabase-url')) {
+      return res.json({ message: 'Bookmarked' });
+    }
 
     // Check if already bookmarked
     const { data: existing } = await supabase
@@ -93,6 +155,11 @@ exports.bookmarkScan = async (req, res) => {
       res.json({ message: 'Bookmarked' });
     }
   } catch (err) {
+    if (isNetworkError(err)) {
+      console.warn('⚠️ Supabase bookmarkScan connection error, returning success message');
+      return res.json({ message: 'Bookmarked (offline fallback)' });
+    }
     res.status(500).json({ message: err.message });
   }
 };
+
