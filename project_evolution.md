@@ -17,10 +17,10 @@ The most significant changes occurred in the backend architecture to ensure scal
 
 ### Current Stack (Live)
 *   **Frontend**: React.js (Vite), Tailwind CSS v4, Framer Motion
-*   **Database (Migrated)**: **Supabase (PostgreSQL)** — Replaced MongoDB for robust relational data persistence and seamless user management.
-*   **OCR (Refined)**: **Google Vision REST API** — Shifted from bulky JSON credentials to a lightweight, secure REST implementation using `GOOGLE_VISION_API_KEY`.
-*   **Camera Integration (New)**: `html5-qrcode` — Added to the frontend to enable true, hardware-accelerated live barcode scanning on both desktop and mobile devices.
-*   **Product Data Proxy (New)**: **Backend Open Food Facts Proxy** — All external API calls now route through the Node.js backend to bypass browser CORS restrictions and securely handle data fetching.
+*   **Database (Migrated)**: **Supabase (PostgreSQL)** - Replaced MongoDB for robust relational data persistence and seamless user management.
+*   **OCR (Refined)**: **Google Vision REST API** - Shifted from bulky JSON credentials to a lightweight, secure REST implementation using `GOOGLE_VISION_API_KEY`.
+*   **Camera Integration (New)**: `html5-qrcode` - Added to the frontend to enable true, hardware-accelerated live barcode scanning on both desktop and mobile devices.
+*   **Product Data Proxy (New)**: **Backend Open Food Facts Proxy** - All external API calls now route through the Node.js backend to bypass browser CORS restrictions and securely handle data fetching.
 
 ---
 

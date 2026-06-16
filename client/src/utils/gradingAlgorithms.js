@@ -1,5 +1,5 @@
 /**
- * gradingAlgorithms.js — Frontend mirrors of backend grading logic
+ * gradingAlgorithms.js - Frontend mirrors of backend grading logic
  * Used for instant client-side preview before server responds
  */
 
@@ -79,7 +79,7 @@ export function computeAllGrades(nutrition, healthMode = 'default') {
   };
 }
 
-/** Helper — returns Tailwind color classes for a score 0-10 or N/A */
+/** Helper - returns Tailwind color classes for a score 0-10 or N/A */
 export function scoreColors(score) {
   if (score === 'N/A') return { bg: 'bg-gray-400', text: 'text-gray-500', light: 'bg-gray-100', label: 'No Data' };
   if (score >= 7) return { bg: 'bg-green-500',  text: 'text-green-600',  light: 'bg-green-50',  label: 'Good' };
@@ -87,7 +87,7 @@ export function scoreColors(score) {
   return           { bg: 'bg-red-500',    text: 'text-red-600',    light: 'bg-red-50',    label: 'Poor' };
 }
 
-/** Helper — Nutri-Score badge color */
+/** Helper - Nutri-Score badge color */
 export function nutriScoreBg(grade) {
   return { A: 'bg-green-600', B: 'bg-lime-500', C: 'bg-amber-400', D: 'bg-orange-500', E: 'bg-red-600' }[grade] || 'bg-gray-400';
 }

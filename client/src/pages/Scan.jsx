@@ -7,12 +7,12 @@ import PageWrapper from '../components/layout/PageWrapper';
 import { scanAPI } from '../utils/api';
 
 const SAMPLE_BARCODES = [
+  { name: 'Snickers Chocolate', barcode: '040000004505' },
   { name: 'Nutella 400g', barcode: '3017620422003' },
   { name: 'Coca-Cola 330ml', barcode: '5449000000996' },
   { name: 'Kit Kat', barcode: '5000159461122' },
   { name: 'Lay\'s Classic', barcode: '028400064057' },
   { name: 'Pringles Original', barcode: '038000845093' },
-  { name: 'Oreo Cookies', barcode: '070221007432' },
 ];
 
 const Scan = () => {
@@ -170,12 +170,37 @@ const Scan = () => {
           {hasCamera ? (
             <div id="reader" className="w-full rounded-2xl overflow-hidden [&_video]:rounded-2xl [&_#reader__dashboard_section_csr]:mt-4 [&_button]:bg-purple-600 [&_button]:text-white [&_button]:px-4 [&_button]:py-2 [&_button]:rounded-xl [&_button]:font-bold [&_button]:border-none"></div>
           ) : (
-            <div className="text-center py-12 px-6">
-              <div className="w-20 h-20 bg-purple-50 rounded-[2rem] flex items-center justify-center mx-auto mb-5 text-4xl shadow-inner shadow-purple-600/5">📷</div>
-              <h3 className="font-black text-gray-800 text-base mb-1">Webcam Not Detected</h3>
-              <p className="text-gray-400 text-xs font-bold max-w-xs mx-auto leading-relaxed">
-                No active webcam was found. Take or upload a photo of the product label/barcode, or use manual entry below!
-              </p>
+            <div className="relative w-full rounded-2xl overflow-hidden bg-gray-950 min-h-[320px] flex flex-col items-center justify-center p-6 border border-purple-500/20">
+              {/* Pulsing scanning line */}
+              <div className="absolute left-0 right-0 top-1/2 h-0.5 bg-purple-500/70 shadow-[0_0_12px_#a855f7] -translate-y-1/2 animate-pulse" />
+              
+              {/* Framing corner brackets */}
+              <div className="absolute top-4 left-4 w-6 h-6 border-t-4 border-l-4 border-purple-500 rounded-tl-md" />
+              <div className="absolute top-4 right-4 w-6 h-6 border-t-4 border-r-4 border-purple-500 rounded-tr-md" />
+              <div className="absolute bottom-4 left-4 w-6 h-6 border-b-4 border-l-4 border-purple-500 rounded-bl-md" />
+              <div className="absolute bottom-4 right-4 w-6 h-6 border-b-4 border-r-4 border-purple-500 rounded-br-md" />
+
+              <div className="text-center z-10 space-y-4 max-w-sm">
+                <div>
+                  <h3 className="text-white font-black text-base">Webcam Simulator Mode</h3>
+                  <p className="text-purple-300 text-xs mt-1 font-semibold">Click a button below to simulate aligning a product's barcode with the camera viewport:</p>
+                </div>
+
+                <div className="flex flex-col gap-2 pt-2">
+                  <button 
+                    onClick={() => handleBarcodeAnalyze('040000004505')}
+                    className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-5 py-3 rounded-2xl text-xs shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    🍫 Simulate Snickers Scan
+                  </button>
+                  <button 
+                    onClick={() => handleBarcodeAnalyze('8904043551548')}
+                    className="bg-amber-500 hover:bg-amber-600 text-white font-bold px-5 py-3 rounded-2xl text-xs shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    🍞 Simulate Brown Bread Scan
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 

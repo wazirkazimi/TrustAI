@@ -6,7 +6,7 @@ const stats = [['1M+','Downloads'],['50K+','Followers'],['150K+','Monthly Users'
 
 const values = [
   { icon: ShieldCheck, title: 'Independent', color: 'bg-purple-100 text-purple-600', desc: 'No brand influence, no paid promotions. Our ratings are never swayed by advertisers or product sponsors.' },
-  { icon: Star, title: 'Unbiased', color: 'bg-amber-100 text-amber-600', desc: 'Every rating is based solely on product labels and ingredient lists — nothing more, nothing less.' },
+  { icon: Star, title: 'Unbiased', color: 'bg-amber-100 text-amber-600', desc: 'Every rating is based solely on product labels and ingredient lists - nothing more, nothing less.' },
   { icon: Globe, title: 'Science-backed', color: 'bg-green-100 text-green-600', desc: 'Our methodology is reviewed by nutritionists and medical experts to ensure accuracy and credibility.' },
   { icon: Users, title: 'Community-driven', color: 'bg-blue-100 text-blue-600', desc: 'Built for and with Indian consumers. Your reports and feedback help us improve every day.' },
 ];
@@ -96,7 +96,7 @@ export default function About() {
           <motion.div initial={{opacity:0,x:-40}} whileInView={{opacity:1,x:0}} viewport={{once:true}} transition={{duration:0.5}}>
             <h2 className="text-4xl font-black mb-5">Why We Built<br/><span className="text-purple-600">TrueBite</span></h2>
             <p className="text-gray-600 leading-relaxed mb-4">Most Indians can't decode complex nutrition labels. Brands use misleading claims like "healthy", "natural", and "fortified" to confuse consumers.</p>
-            <p className="text-gray-600 leading-relaxed mb-4">We built TrueBite to cut through that noise — using OCR scanning, FSSAI compliance verification, and 4 international grading standards.</p>
+            <p className="text-gray-600 leading-relaxed mb-4">We built TrueBite to cut through that noise - using OCR scanning, FSSAI compliance verification, and 4 international grading standards.</p>
             <p className="text-gray-600 leading-relaxed mb-8"><strong>No brand influence. No paid promotions. Just pure science.</strong></p>
             <Link to="/rating-system" className="inline-flex items-center gap-2 bg-purple-600 text-white font-bold px-7 py-3.5 rounded-2xl shadow-lg shadow-purple-600/25 hover:bg-purple-700 transition-all">
               See How We Rate <ArrowRight size={18}/>
@@ -116,7 +116,7 @@ export default function About() {
                 <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                   <Check size={13} className="text-white"/>
                 </div>
-                <div><span className="font-bold text-white">{item.check}</span><span className="text-purple-200"> — {item.desc}</span></div>
+                <div><span className="font-bold text-white">{item.check}</span><span className="text-purple-200"> - {item.desc}</span></div>
               </div>
             ))}
           </motion.div>
@@ -159,7 +159,7 @@ export default function About() {
       </section>
 
       <footer className="bg-gray-900 text-gray-400 py-8 px-4 sm:px-6 text-center">
-        <p className="text-sm">Built with ❤️ for India 🇮🇳 · © 2026 TrueBite — By Wazir Kazimi & Jyotsna Bannur</p>
+        <p className="text-sm">Built with ❤️ for India 🇮🇳 · © 2026 TrueBite - By Wazir Kazimi & Jyotsna Bannur</p>
       </footer>
     </div>
   );

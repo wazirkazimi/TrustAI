@@ -36,7 +36,7 @@ function calcCustomScore(nutrition, healthMode = 'default') {
 }
 
 /**
- * Nutri-Score (A–E) — European system
+ * Nutri-Score (A–E) - European system
  * Negative: energy, saturatedFat, sugars, sodium
  * Positive: fiber, protein
  */
@@ -78,7 +78,7 @@ function calcNutriScore(nutrition) {
 }
 
 /**
- * Nutri-Grade (A–D) — Singapore system
+ * Nutri-Grade (A–D) - Singapore system
  * Based on sugar and saturated fat per 100g
  */
 function calcNutriGrade(nutrition) {
@@ -91,7 +91,7 @@ function calcNutriGrade(nutrition) {
 }
 
 /**
- * Japanese Grade — Balance-based system
+ * Japanese Grade - Balance-based system
  * Considers macronutrient ratio and overall nutritional balance
  */
 function calcJapaneseGrade(nutrition) {
@@ -118,7 +118,7 @@ function calcJapaneseGrade(nutrition) {
 }
 
 /**
- * Master function — Compute all 4 grades at once
+ * Master function - Compute all 4 grades at once
  */
 function computeAllGrades(nutrition, healthMode = 'default') {
   return {

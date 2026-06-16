@@ -45,7 +45,7 @@ const Profile = () => {
         setActiveMode(data.healthMode || 'default');
         setIsVeg(data.vegFilter || false);
       } catch (err) {
-        // API failed (e.g. Supabase unreachable) — keep using cached data, don't redirect
+        // API failed (e.g. Supabase unreachable) - keep using cached data, don't redirect
         console.warn('Could not refresh profile from server, using cached data:', err.message);
       }
     };

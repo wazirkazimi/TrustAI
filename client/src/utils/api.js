@@ -14,14 +14,14 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle 401 globally — clear token so AuthContext picks up the change
+// Handle 401 globally - clear token so AuthContext picks up the change
 api.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
       localStorage.removeItem('truebite_token');
       localStorage.removeItem('truebite_user');
-      // Don't force redirect here — let individual pages/AuthContext handle navigation
+      // Don't force redirect here - let individual pages/AuthContext handle navigation
     }
     return Promise.reject(err);
   }

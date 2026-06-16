@@ -265,7 +265,7 @@ export default function Search() {
               <p className="text-gray-400 text-sm px-10">Try common Indian brands like Maggi, Amul, Haldirams or Parle.</p>
             </motion.div>
           ) : (
-            // Default state — popular searches
+            // Default state - popular searches
             <motion.div key="default">
               <div className="flex items-center gap-2 mb-4">
                 <TrendingUp size={16} className="text-purple-600"/>

@@ -281,7 +281,7 @@ const doc = new Document({
         // ── ABSTRACT ────────────────────────────────────────────────────────
         cen('ABSTRACT',30,true,BLU),
         sp(160),
-        body('TrueBite is a full-stack web application built on the MERN-inspired stack (React.js, Node.js, Express.js) with Supabase (PostgreSQL) as the primary cloud database, designed to empower Indian consumers with real-time food safety and nutritional transparency. The platform allows users to scan or upload packaged food product images for OCR-based text extraction using the Google Vision REST API, or scan product barcodes using html5-qrcode for instant product lookup from the Open Food Facts database — filtered exclusively for Indian-packaged food products.'),
+        body('TrueBite is a full-stack web application built on the MERN-inspired stack (React.js, Node.js, Express.js) with Supabase (PostgreSQL) as the primary cloud database, designed to empower Indian consumers with real-time food safety and nutritional transparency. The platform allows users to scan or upload packaged food product images for OCR-based text extraction using the Google Vision REST API, or scan product barcodes using html5-qrcode for instant product lookup from the Open Food Facts database - filtered exclusively for Indian-packaged food products.'),
         sp(80),
         body('TrueBite verifies extracted FSSAI licence numbers against the official FSSAI FOSCOS API in real time and computes four internationally recognised health grades simultaneously: a proprietary Custom Health Score (0–10), the European Nutri-Score (A–E), Singapore\'s Nutri-Grade (A–D), and a Japanese nutritional balance grade. The platform features a personalised 4-step onboarding flow, health mode scoring (Weight Loss, Diabetic, Gym), Veg/Non-Veg detection and filtering, a personal Food Log with scan history, bookmarks, an in-app compliance reporting system, and a dedicated Experts consultation page.'),
         sp(80),
@@ -308,7 +308,7 @@ const doc = new Document({
         pb(),
 
         // ══════════════════════════════════════════════════════════════════════
-        // CHAPTER 1 — INTRODUCTION
+        // CHAPTER 1 - INTRODUCTION
         // ══════════════════════════════════════════════════════════════════════
         h1('1. INTRODUCTION'),
         sp(80),
@@ -329,7 +329,7 @@ const doc = new Document({
         body('Key purposes include:'),
         bul('FSSAI Compliance Verification: Verify whether a product\'s FSSAI licence is valid, invalid, or unverified in real time using the official FOSCOS API.'),
         bul('Multi-Standard Health Grading: Apply four internationally recognised grading systems (Custom Score, Nutri-Score, Nutri-Grade, Japanese Grade) to every product simultaneously.'),
-        bul('Personalised Scoring: Adjust health scores based on the user\'s health goal — Weight Loss, Diabetic, Gym, or Default mode.'),
+        bul('Personalised Scoring: Adjust health scores based on the user\'s health goal - Weight Loss, Diabetic, Gym, or Default mode.'),
         bul('Dual Input Scanning: Accept product input via image upload (OCR) or live barcode scanning.'),
         bul('Community Reporting: Allow users to report non-compliant products directly within the app.'),
         sp(100),
@@ -378,11 +378,11 @@ const doc = new Document({
         h3('7. Food Log, Bookmarks & Reporting Module'),
         body('Complete scan history persisted per user in Supabase. Users can bookmark products, filter history by grade and Veg status, and file in-app compliance reports against non-compliant products.'),
         h3('8. Experts Consultation Page'),
-        body('Dedicated page featuring the actual co-founders — Wazir Kazimi (Co-Founder & CEO) and Jyotsna Bannur (Co-Founder & Head of Nutrition) — with professional bios, expertise tags, and consultation request functionality.'),
+        body('Dedicated page featuring the actual co-founders - Wazir Kazimi (Co-Founder & CEO) and Jyotsna Bannur (Co-Founder & Head of Nutrition) - with professional bios, expertise tags, and consultation request functionality.'),
         pb(),
 
         // ══════════════════════════════════════════════════════════════════════
-        // CHAPTER 2 — REQUIREMENT ANALYSIS
+        // CHAPTER 2 - REQUIREMENT ANALYSIS
         // ══════════════════════════════════════════════════════════════════════
         h1('2. REQUIREMENT ANALYSIS'),
         sp(80),
@@ -405,7 +405,7 @@ const doc = new Document({
         sp(60),
         bul('Frontend: React.js 18 (Vite), Tailwind CSS v4, Framer Motion'),
         bul('Backend: Node.js 18+, Express.js 4.x'),
-        bul('Database: Supabase (PostgreSQL) — cloud hosted'),
+        bul('Database: Supabase (PostgreSQL) - cloud hosted'),
         bul('OCR: Google Vision REST API (primary), Tesseract.js (fallback)'),
         bul('Barcode Scanning: html5-qrcode (browser-based, hardware-accelerated)'),
         bul('Charts: Chart.js with react-chartjs-2'),
@@ -419,7 +419,7 @@ const doc = new Document({
         pb(),
 
         // ══════════════════════════════════════════════════════════════════════
-        // CHAPTER 3 — SRS
+        // CHAPTER 3 - SRS
         // ══════════════════════════════════════════════════════════════════════
         h1('3. SOFTWARE REQUIREMENT SPECIFICATION'),
         sp(80),
@@ -455,7 +455,7 @@ const doc = new Document({
         body('Supabase replaced the initial MongoDB setup as the primary database. Supabase provides a hosted PostgreSQL database with built-in user management, Row Level Security (RLS), and a real-time API. The relational structure of PostgreSQL is better suited for TrueBite\'s complex scan-user-bookmark relationships than a document database.'),
         bul('Four primary tables: users, scans, reports, bookmarks'),
         bul('Row Level Security enforced: users can only read/write their own scan records'),
-        bul('JSONB columns for nutrition_data and scores — flexible schema within relational structure'),
+        bul('JSONB columns for nutrition_data and scores - flexible schema within relational structure'),
         bul('Supabase client SDK used for direct frontend queries where appropriate'),
 
         sp(80),
@@ -501,7 +501,7 @@ const doc = new Document({
         pb(),
 
         // ══════════════════════════════════════════════════════════════════════
-        // CHAPTER 4 — ANALYSIS AND DESIGN
+        // CHAPTER 4 - ANALYSIS AND DESIGN
         // ══════════════════════════════════════════════════════════════════════
         h1('4. System Analysis and Design'),
         sp(80),
@@ -626,7 +626,7 @@ const doc = new Document({
         pb(),
 
         // ══════════════════════════════════════════════════════════════════════
-        // CHAPTER 5 — IMPLEMENTATION
+        // CHAPTER 5 - IMPLEMENTATION
         // ══════════════════════════════════════════════════════════════════════
         h1('5. Implementation'),
         sp(80),
@@ -689,13 +689,13 @@ const doc = new Document({
         new Paragraph({alignment:AlignmentType.CENTER,spacing:{before:80,after:40},children:[new TextRun({text:'5.2.1. Landing Page',size:22,font:F,bold:true,underline:{}})]}),
         body('Full-screen purple gradient hero with glassmorphism card, animated tagline "Scan. Verify. Trust.", three feature highlight cards (OCR Scan | FSSAI Verify | Health Grade), and a "Get Started" CTA button.'),
         sp(60),
-        new Paragraph({alignment:AlignmentType.CENTER,spacing:{before:80,after:40},children:[new TextRun({text:'5.2.2. Register — 4-Step Onboarding',size:22,font:F,bold:true,underline:{}})]}),
+        new Paragraph({alignment:AlignmentType.CENTER,spacing:{before:80,after:40},children:[new TextRun({text:'5.2.2. Register - 4-Step Onboarding',size:22,font:F,bold:true,underline:{}})]}),
         body('Step-by-step survey with progress indicator and Framer Motion transitions. Step 1: Name/Email/Password. Step 2: Primary health goal cards. Step 3: Vegan/Non-Vegan toggle. Step 4: Allergy tag input.'),
         sp(60),
         new Paragraph({alignment:AlignmentType.CENTER,spacing:{before:80,after:40},children:[new TextRun({text:'5.2.3. Home Dashboard',size:22,font:F,bold:true,underline:{}})]}),
         body('Personalised greeting with user name, pulsing central Scan CTA button, horizontally scrollable category chips, Healthy Picks product grid, and recent scan history cards.'),
         sp(60),
-        new Paragraph({alignment:AlignmentType.CENTER,spacing:{before:80,after:40},children:[new TextRun({text:'5.2.4. Scan Page — Image & Barcode Tabs',size:22,font:F,bold:true,underline:{}})]}),
+        new Paragraph({alignment:AlignmentType.CENTER,spacing:{before:80,after:40},children:[new TextRun({text:'5.2.4. Scan Page - Image & Barcode Tabs',size:22,font:F,bold:true,underline:{}})]}),
         body('Image tab: dashed purple drop zone with animated scanning line during OCR processing. Barcode tab: live camera viewfinder with corner bracket overlay and success animation on decode.'),
         sp(60),
         new Paragraph({alignment:AlignmentType.CENTER,spacing:{before:80,after:40},children:[new TextRun({text:'5.2.5. Results Dashboard',size:22,font:F,bold:true,underline:{}})]}),
@@ -991,7 +991,7 @@ const doc = new Document({
         pb(),
 
         // ══════════════════════════════════════════════════════════════════════
-        // CHAPTER 6 — TESTING
+        // CHAPTER 6 - TESTING
         // ══════════════════════════════════════════════════════════════════════
         h1('6. Testing'),
         sp(80),
@@ -1026,11 +1026,11 @@ const doc = new Document({
         ),
         sp(120),
         h3('4. Cross-Browser and Compatibility Testing'),
-        bul('Chrome (Windows, Android) — Pass'),
-        bul('Firefox (Linux, Windows) — Pass'),
-        bul('Safari (macOS, iOS) — Pass'),
-        bul('Edge (Windows 11) — Pass'),
-        bul('Responsive layout on tablets and mobile — Pass'),
+        bul('Chrome (Windows, Android) - Pass'),
+        bul('Firefox (Linux, Windows) - Pass'),
+        bul('Safari (macOS, iOS) - Pass'),
+        bul('Edge (Windows 11) - Pass'),
+        bul('Responsive layout on tablets and mobile - Pass'),
         sp(100),
         h2('Sample Test Cases:'),
         sp(60),
@@ -1050,10 +1050,10 @@ const doc = new Document({
         tbl(
           ['TC#','Test Scenario','Test Steps','Expected Result','Status'],
           [
-            ['TC05','Image Upload — clear label','Upload clear JPEG of Maggi noodles label','FSSAI number extracted; all 4 grades computed','Pass'],
-            ['TC06','Image Upload — blurry','Upload low-resolution blurry product image','Missing fields display N/A (not false 10/10 — fixed)','Pass'],
-            ['TC07','Barcode — valid Indian product','Scan barcode of registered Indian product','Product data from OFacts; results dashboard populated','Pass'],
-            ['TC08','Barcode — foreign product','Scan US product barcode','Graceful error: "Product not found in Indian database"','Pass'],
+            ['TC05','Image Upload - clear label','Upload clear JPEG of Maggi noodles label','FSSAI number extracted; all 4 grades computed','Pass'],
+            ['TC06','Image Upload - blurry','Upload low-resolution blurry product image','Missing fields display N/A (not false 10/10 - fixed)','Pass'],
+            ['TC07','Barcode - valid Indian product','Scan barcode of registered Indian product','Product data from OFacts; results dashboard populated','Pass'],
+            ['TC08','Barcode - foreign product','Scan US product barcode','Graceful error: "Product not found in Indian database"','Pass'],
           ],
           [700,2200,2200,2360,1100]
         ),
@@ -1085,7 +1085,7 @@ const doc = new Document({
         pb(),
 
         // ══════════════════════════════════════════════════════════════════════
-        // CHAPTER 7 — CONCLUSION
+        // CHAPTER 7 - CONCLUSION
         // ══════════════════════════════════════════════════════════════════════
         h1('7. CONCLUSION'),
         sp(80),
@@ -1116,7 +1116,7 @@ const doc = new Document({
         pb(),
 
         // ══════════════════════════════════════════════════════════════════════
-        // CHAPTER 8 — BIBLIOGRAPHY
+        // CHAPTER 8 - BIBLIOGRAPHY
         // ══════════════════════════════════════════════════════════════════════
         h1('8. Bibliography'),
         sp(80),
@@ -1139,7 +1139,7 @@ const doc = new Document({
         body('Silberschatz, A., Korth, H. F., & Sudarshan, S. (2019). Database System Concepts, 7th Edition. McGraw-Hill Education.'),
         body('Pressman, R. S. (2014). Software Engineering: A Practitioner\'s Approach, 8th Edition. McGraw-Hill Education.'),
         sp(240),
-        new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:'— End of Project Report —',bold:true,size:22,font:FA,color:BLU})]})
+        new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:'- End of Project Report -',bold:true,size:22,font:FA,color:BLU})]})
       ]
     }
   ]

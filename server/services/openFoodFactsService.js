@@ -181,6 +181,46 @@ const MOCK_PRODUCTS = [
     },
     additives: ['E211', 'E260', 'E415'],
     processingLevel: 'Processed'
+  },
+  {
+    barcode: '040000004505',
+    productName: 'Snickers Chocolate Bar',
+    brand: 'Mars',
+    imageUrl: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=200',
+    categories: 'Chocolates, Confectionery, Snacks',
+    vegStatus: 'veg',
+    nutritionData: {
+      calories: 488,
+      protein: 8.6,
+      carbs: 60,
+      fat: 24,
+      saturatedFat: 10,
+      transFat: 0.1,
+      sugar: 52,
+      sodium: 240
+    },
+    additives: ['E322', 'E500'],
+    processingLevel: 'Ultra-Processed'
+  },
+  {
+    barcode: '8904043551548',
+    productName: 'Bimbo Bakeries Brown Bread',
+    brand: 'Bimbo',
+    imageUrl: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500',
+    categories: 'Bread, Bakery, Snacks',
+    vegStatus: 'veg',
+    nutritionData: {
+      calories: 263.93,
+      protein: 9.6,
+      carbs: 45,
+      fat: 4.17,
+      saturatedFat: 2.29,
+      transFat: 0,
+      sugar: 3.9,
+      sodium: 480
+    },
+    additives: ['E282', 'E200'],
+    processingLevel: 'Processed'
   }
 ];
 

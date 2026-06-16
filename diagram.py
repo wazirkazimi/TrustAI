@@ -1,4 +1,4 @@
-import os
+﻿import os
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.patches import FancyBboxPatch
@@ -123,7 +123,7 @@ def card(ax, x, y, label):
     )
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# ER DIAGRAM — CLEAN PROFESSIONAL VERSION
+# ER DIAGRAM - CLEAN PROFESSIONAL VERSION
 # ═══════════════════════════════════════════════════════════════════════════════
 
 fig, ax = plt.subplots(figsize=(16, 10))
@@ -291,7 +291,7 @@ line(ax, 12.2, 1.9, 11.7, 2.6)
 # ──────────────────────────────────────────────────────────────────────────────
 
 ax.set_title(
-    'TrueBite — Entity Relationship (ER) Diagram',
+    'TrueBite - Entity Relationship (ER) Diagram',
     fontsize=15,
     fontweight='bold',
     pad=20
@@ -315,7 +315,7 @@ plt.close()
 print("Professional ER Diagram Generated")
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# DFD LEVEL 0 — CONTEXT DIAGRAM
+# DFD LEVEL 0 - CONTEXT DIAGRAM
 # ═══════════════════════════════════════════════════════════════════════════════
 fig, ax = plt.subplots(figsize=(12, 5))
 ax.set_xlim(0, 12)
@@ -342,14 +342,14 @@ ax.text(8.85, 3.45, 'OCR Request /\nBarcode / FSSAI No.', ha='center', fontsize=
 ax.annotate('', xy=(7.8, 2.0), xytext=(9.9, 2.0), arrowprops=dict(arrowstyle='->', lw=1.5, color='black'), zorder=5)
 ax.text(8.85, 1.65, 'Product Data /\nLicence Status', ha='center', fontsize=8)
 
-ax.set_title('Level 0 DFD — Context Diagram', fontsize=12, fontweight='bold')
+ax.set_title('Level 0 DFD - Context Diagram', fontsize=12, fontweight='bold')
 plt.tight_layout()
 plt.savefig(os.path.join(ROOT_DIR, 'dfd_level0.png'), dpi=300, bbox_inches='tight', facecolor='white')
 plt.close()
 print('DFD0 Diagram Generated')
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# DFD LEVEL 1 — MAIN FUNCTIONAL PROCESSES
+# DFD LEVEL 1 - MAIN FUNCTIONAL PROCESSES
 # ═══════════════════════════════════════════════════════════════════════════════
 fig, ax = plt.subplots(figsize=(14, 9))
 ax.set_xlim(0, 14)
@@ -385,11 +385,11 @@ def arr(ax, x1, y1, x2, y2, lbl='', side='top'):
     ax.text(mx, my + off, lbl, ha='center', fontsize=7.5, color='#333')
 
 
-datastore(ax, 9, 7.6, 3.5, 0.5, 'D1  Supabase — Users Table')
-datastore(ax, 9, 5.8, 3.5, 0.5, 'D2  Supabase — Scans Table')
+datastore(ax, 9, 7.6, 3.5, 0.5, 'D1  Supabase - Users Table')
+datastore(ax, 9, 5.8, 3.5, 0.5, 'D2  Supabase - Scans Table')
 datastore(ax, 9, 4.0, 3.5, 0.5, 'D3  FSSAI FOSCOS API')
 datastore(ax, 9, 2.2, 3.5, 0.5, 'D4  Open Food Facts API')
-datastore(ax, 9, 0.4, 3.5, 0.5, 'D5  Supabase — Reports Table')
+datastore(ax, 9, 0.4, 3.5, 0.5, 'D5  Supabase - Reports Table')
 
 arr(ax, 1.8, 8, 3.7, 8, 'Login / Register Info')
 arr(ax, 1.8, 6.2, 3.7, 6.2, 'Image / Barcode')
@@ -403,14 +403,14 @@ arr(ax, 6.3, 4.4, 9, 4.25, 'Verify Licence')
 arr(ax, 6.3, 2.6, 9, 2.45, 'Fetch Product Data')
 arr(ax, 6.3, 0.8, 9, 0.65, 'Report Record')
 
-ax.set_title('Level 1 DFD — Main Functional Processes', fontsize=12, fontweight='bold')
+ax.set_title('Level 1 DFD - Main Functional Processes', fontsize=12, fontweight='bold')
 plt.tight_layout()
 plt.savefig(os.path.join(ROOT_DIR, 'dfd_level1.png'), dpi=300, bbox_inches='tight', facecolor='white')
 plt.close()
 print('DFD1 Diagram Generated')
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# DFD LEVEL 2 — SCAN INPUT & GRADING
+# DFD LEVEL 2 - SCAN INPUT & GRADING
 # ═══════════════════════════════════════════════════════════════════════════════
 fig, ax = plt.subplots(figsize=(13, 7))
 ax.set_xlim(0, 13)
@@ -450,7 +450,7 @@ arr(ax, 9.9, 2.4, 10.5, 2.2, 'Save Score')
 ax.annotate('', xy=(8.5, 3.8), xytext=(8.5, 4.45), arrowprops=dict(arrowstyle='->', lw=1.3, color='black'), zorder=5)
 ax.text(8.8, 4.1, 'Nutrition JSON', fontsize=7.5)
 
-ax.set_title('Level 2 DFD — Scan Input & Grading Process', fontsize=12, fontweight='bold')
+ax.set_title('Level 2 DFD - Scan Input & Grading Process', fontsize=12, fontweight='bold')
 plt.tight_layout()
 plt.savefig(os.path.join(ROOT_DIR, 'dfd_level2.png'), dpi=300, bbox_inches='tight', facecolor='white')
 plt.close()

@@ -12,7 +12,7 @@ const scale = [
 const components = [
   {
     num:'01', title:'Nutrition Profile',
-    desc:'The foundation of our rating. We assess key nutrients relevant to the food category — both good and bad.',
+    desc:'The foundation of our rating. We assess key nutrients relevant to the food category - both good and bad.',
     good:['Protein','Dietary Fiber','Essential Minerals'],
     bad:['Added Sugars','Sodium','Saturated Fat','Trans Fat'],
     note:'All assessments happen within the product\'s category. A biscuit is judged against other biscuits, not a bowl of curd.',
@@ -75,7 +75,7 @@ export default function RatingSystem() {
         <div className="max-w-4xl mx-auto text-center">
           <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
             <div className="inline-flex items-center bg-purple-100 border border-purple-200 px-4 py-1.5 rounded-full mb-6 text-purple-700 text-sm font-bold">
-              <Zap size={14} className="mr-1.5"/>FTRS — TrueBite Rating System
+              <Zap size={14} className="mr-1.5"/>FTRS - TrueBite Rating System
             </div>
             <h1 className="text-5xl sm:text-6xl font-black leading-tight mb-5">
               What is <span className="text-purple-600">FTRS?</span>
@@ -84,7 +84,7 @@ export default function RatingSystem() {
               TrueBite gives every packaged food a simple, science-backed rating from 0 to 5, so you can quickly understand how healthy it really is.
             </p>
             <p className="text-gray-500 max-w-2xl mx-auto leading-relaxed">
-              Unlike front-of-pack marketing claims, the TrueBite Rating System (FTRS) looks deeper — evaluating a product's nutrition profile, ingredient health impact, processing level, and presence of potentially harmful additives. It cuts through misleading claims and shows you the <strong>real health impact</strong> of what you're eating.
+              Unlike front-of-pack marketing claims, the TrueBite Rating System (FTRS) looks deeper - evaluating a product's nutrition profile, ingredient health impact, processing level, and presence of potentially harmful additives. It cuts through misleading claims and shows you the <strong>real health impact</strong> of what you're eating.
             </p>
           </motion.div>
         </div>
@@ -146,7 +146,7 @@ export default function RatingSystem() {
         </div>
       </section>
 
-      {/* How do we rate — 4 components */}
+      {/* How do we rate - 4 components */}
       <section className="py-20 px-4 sm:px-6 bg-gray-50">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
@@ -208,7 +208,7 @@ export default function RatingSystem() {
           {/* Combined summary */}
           <div className="mt-10 bg-purple-600 rounded-3xl p-8 text-white text-center">
             <h3 className="text-2xl font-black mb-3">All 4 Grades. One Scan.</h3>
-            <p className="text-purple-200 max-w-lg mx-auto mb-6">TrueBite is the only platform that combines FTRS + Nutri-Score + Nutri-Grade + JP Balance Score in a single scan — giving you the most comprehensive food health rating available anywhere.</p>
+            <p className="text-purple-200 max-w-lg mx-auto mb-6">TrueBite is the only platform that combines FTRS + Nutri-Score + Nutri-Grade + JP Balance Score in a single scan - giving you the most comprehensive food health rating available anywhere.</p>
             <Link to="/scan" className="inline-flex items-center gap-2 bg-white text-purple-600 font-black px-8 py-3.5 rounded-2xl shadow-xl hover:scale-105 transition-transform">
               Scan Your First Product <ArrowRight size={18}/>
             </Link>

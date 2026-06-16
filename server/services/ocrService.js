@@ -9,7 +9,7 @@ async function extractTextFromImage(base64Image) {
   const apiKey = process.env.GOOGLE_VISION_API_KEY;
 
   if (!apiKey) {
-    console.warn('GOOGLE_VISION_API_KEY not set — skipping OCR');
+    console.warn('GOOGLE_VISION_API_KEY not set - skipping OCR');
     return { rawText: '', fssaiNumber: '', nutritionRaw: {} };
   }
 

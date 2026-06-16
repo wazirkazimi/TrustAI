@@ -17,14 +17,14 @@ const steps = [
   },
   {
     num: '03', icon: Sparkles, title: 'Discover Better Options',
-    desc: 'Scroll further to find the better-rated products from the same category — healthier alternatives suggested instantly, tailored to your health mode.',
+    desc: 'Scroll further to find the better-rated products from the same category - healthier alternatives suggested instantly, tailored to your health mode.',
     details: ['See healthier alternatives','Filtered to your dietary needs','Compare products side by side','Save favorites to your log'],
     color: 'from-green-500 to-emerald-600', light: 'bg-green-50 border-green-100 text-green-600',
   },
 ];
 
 const features = [
-  { icon: Camera, title: 'OCR Label Scanning', desc: 'Upload a photo of any nutrition label — our AI reads it and extracts all nutritional data automatically.' },
+  { icon: Camera, title: 'OCR Label Scanning', desc: 'Upload a photo of any nutrition label - our AI reads it and extracts all nutritional data automatically.' },
   { icon: ShieldCheck, title: 'FSSAI Verification', desc: 'Every product is cross-checked against the FSSAI FOSCOS database for compliance status.' },
   { icon: ScanLine, title: 'Barcode Lookup', desc: 'Scan or enter any barcode to instantly fetch product data from our 1M+ product database.' },
   { icon: Sparkles, title: 'Health Mode Scoring', desc: 'Switch between Diabetic, Gym, Weight Loss, or Default mode to get personalized ratings.' },
@@ -56,7 +56,7 @@ export default function HowItWorks() {
           <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
             <div className="inline-flex items-center bg-amber-100 border border-amber-200 px-4 py-1.5 rounded-full mb-6 text-amber-700 text-sm font-bold">3 Easy Steps</div>
             <h1 className="text-5xl sm:text-6xl font-black leading-tight mb-5">
-              How it works —<br/><span className="text-purple-600">3 easy steps</span>
+              How it works -<br/><span className="text-purple-600">3 easy steps</span>
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
               Getting started with TrueBite is simple and quick. Follow these three steps to make informed, healthier choices for you and your family.
@@ -65,7 +65,7 @@ export default function HowItWorks() {
         </div>
       </section>
 
-      {/* Steps — Timeline */}
+      {/* Steps - Timeline */}
       <section className="py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-5xl mx-auto">
           <div className="relative">
@@ -195,7 +195,7 @@ export default function HowItWorks() {
 
       {/* CTA */}
       <section className="py-20 px-4 sm:px-6 bg-purple-600 text-center text-white">
-        <h2 className="text-3xl font-black mb-3">Try it now — it's free</h2>
+        <h2 className="text-3xl font-black mb-3">Try it now - it's free</h2>
         <p className="text-purple-200 mb-8 max-w-md mx-auto">Scan your first product in under 10 seconds.</p>
         <Link to="/scan" className="inline-flex items-center gap-2 bg-white text-purple-600 font-black px-8 py-4 rounded-2xl shadow-xl hover:shadow-2xl transition-all hover:scale-105">
           Start Scanning <ArrowRight size={18}/>

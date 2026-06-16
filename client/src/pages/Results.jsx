@@ -7,7 +7,8 @@ import PageWrapper from '../components/layout/PageWrapper';
 import { computeAllGrades, scoreColors, nutriScoreBg } from '../utils/gradingAlgorithms';
 
 import { useAuth } from '../context/AuthContext';
-import { scanAPI } from '../utils/api';
+import { scanAPI, userAPI, reportAPI } from '../utils/api';
+import toast from 'react-hot-toast';
 
 const API = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
@@ -70,6 +71,8 @@ export default function Results() {
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('basic');
   const [bookmarked, setBookmarked] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   // Report Modal states
   const [showReportModal, setShowReportModal] = useState(false);
@@ -85,58 +88,126 @@ export default function Results() {
     const load = async () => {
       setLoading(true);
       try {
+        let currentProduct = null;
         if (scanId === 'demo-123') {
+          currentProduct = DEMO;
           setProduct(DEMO);
           setReportFssai(DEMO.fssaiNumber);
-          return;
+        } else {
+          const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(scanId);
+
+          if (isUUID) {
+            // Fetch OCR scan result from Supabase
+            const res = await scanAPI.getScanById(scanId);
+            const scan = res.data;
+            currentProduct = {
+              id: scan.id,
+              name: scan.product_name || 'OCR Scanned Product',
+              brand: scan.brand || 'Self Scanned',
+              fssaiValid: scan.fssai_status === 'valid' || scan.fssai_status === 'verified',
+              isVeg: scan.veg_status === 'veg' || true,
+              image: scan.image_url || '',
+              nutritionData: !isNutritionDataMissing(scan.nutrition_data) ? scan.nutrition_data : DEMO.nutritionData,
+              processingLevel: scan.processing_level || 'Ultra-Processed',
+              additives: (scan.additives || []).map(a => a.replace('en:', '').toUpperCase()),
+              fssaiNumber: scan.fssai_number || '',
+            };
+            setProduct(currentProduct);
+            setReportFssai(scan.fssai_number || '');
+          } else {
+            // Fetch standard barcode product details
+            const res = await axios.get(`${API}/search/product/${scanId}`, { timeout: 12000 });
+            currentProduct = {
+              barcode: scanId,
+              name: res.data.productName || 'Unknown Product',
+              brand: res.data.brand || '',
+              fssaiValid: res.data.fssaiValid || false,
+              isVeg: res.data.vegStatus === 'veg',
+              image: res.data.imageUrl || '',
+              nutritionData: !isNutritionDataMissing(res.data.nutritionData) ? res.data.nutritionData : DEMO.nutritionData,
+              processingLevel: res.data.processingLevel || 'Unknown',
+              additives: (res.data.additives || []).map(a => a.replace('en:', '').toUpperCase()),
+              fssaiNumber: res.data.fssaiNumber || '',
+            };
+            setProduct(currentProduct);
+            setReportFssai(res.data.fssaiNumber || '');
+          }
         }
 
-        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(scanId);
-
-        if (isUUID) {
-          // Fetch OCR scan result from Supabase
-          const res = await scanAPI.getScanById(scanId);
-          const scan = res.data;
-          setProduct({
-            name: scan.product_name || 'OCR Scanned Product',
-            brand: scan.brand || 'Self Scanned',
-            fssaiValid: scan.fssai_status === 'valid' || scan.fssai_status === 'verified',
-            isVeg: scan.veg_status === 'veg' || true,
-            image: scan.image_url || '',
-            nutritionData: !isNutritionDataMissing(scan.nutrition_data) ? scan.nutrition_data : DEMO.nutritionData,
-            processingLevel: scan.processing_level || 'Ultra-Processed',
-            additives: (scan.additives || []).map(a => a.replace('en:', '').toUpperCase()),
-            fssaiNumber: scan.fssai_number || '',
-          });
-          setReportFssai(scan.fssai_number || '');
-        } else {
-          // Fetch standard barcode product details
-          const res = await axios.get(`${API}/search/product/${scanId}`, { timeout: 12000 });
-          setProduct({
-            name: res.data.productName || 'Unknown Product',
-            brand: res.data.brand || '',
-            fssaiValid: res.data.fssaiValid || false,
-            isVeg: res.data.vegStatus === 'veg',
-            image: res.data.imageUrl || '',
-            nutritionData: !isNutritionDataMissing(res.data.nutritionData) ? res.data.nutritionData : DEMO.nutritionData,
-            processingLevel: res.data.processingLevel || 'Unknown',
-            additives: (res.data.additives || []).map(a => a.replace('en:', '').toUpperCase()),
-            fssaiNumber: res.data.fssaiNumber || '',
-          });
-          setReportFssai(res.data.fssaiNumber || '');
+        // Fetch user bookmarks to set initial bookmarked state
+        if (user && currentProduct) {
+          try {
+            const bRes = await userAPI.getBookmarks();
+            const bookmarks = bRes.data || [];
+            const isBookmarked = bookmarks.some(b => 
+              b.id === scanId || 
+              (b.barcode_number && b.barcode_number === scanId) ||
+              (currentProduct.id && b.id === currentProduct.id)
+            );
+            setBookmarked(isBookmarked);
+          } catch (bErr) {
+            console.warn('Failed to fetch bookmarks:', bErr.message);
+          }
         }
       } catch (err) {
         console.error('Fetch scan error:', err);
         setProduct(DEMO);
         setError(err.response?.status === 404
-          ? 'Product not found in database — showing demo data'
-          : 'Could not reach server — showing demo data');
+          ? 'Product not found in database - showing demo data'
+          : 'Could not reach server - showing demo data');
       } finally {
         setLoading(false);
       }
     };
     load();
-  }, [scanId]);
+  }, [scanId, user]);
+
+  const handleSaveLog = async (e) => {
+    if (e) e.preventDefault();
+    if (!user) {
+      toast.error('Please sign in to save products to your log!', { id: 'auth-err' });
+      navigate('/login');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(scanId);
+      let targetScanId = scanId;
+
+      if (!isUUID) {
+        // Barcode view: create scan in DB first
+        const scanRes = await scanAPI.scanBarcode(scanId);
+        const newScan = scanRes.data?.scan || scanRes.data;
+        if (!newScan || !newScan.id) {
+          throw new Error('Failed to log scan: No scan ID returned');
+        }
+        targetScanId = newScan.id;
+        // Silently update the URL
+        navigate(`/results/${targetScanId}`, { replace: true });
+      }
+
+      // Now toggle bookmark status
+      const bookmarkRes = await userAPI.bookmark(targetScanId);
+      const msg = bookmarkRes.data?.message || '';
+
+      if (msg.includes('Un-bookmarked') || msg.includes('Un-bookmark')) {
+        setBookmarked(false);
+        setSaveSuccess(false);
+        toast.success('Removed from Saved log', { icon: '🗑️' });
+      } else {
+        setBookmarked(true);
+        setSaveSuccess(true);
+        toast.success('Saved to Food Log & Bookmarks! 🎉');
+        setTimeout(() => setSaveSuccess(false), 3000);
+      }
+    } catch (err) {
+      console.error('Save to log error:', err);
+      toast.error(err.response?.data?.message || 'Failed to save to log');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const submitReport = async (e) => {
     e.preventDefault();
@@ -204,8 +275,16 @@ export default function Results() {
             className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center">
             <Share2 size={18} className="text-gray-600"/>
           </button>
-          <button onClick={() => setBookmarked(b => !b)} className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center">
-            <Heart size={18} className={bookmarked ? 'fill-red-500 text-red-500' : 'text-gray-600'}/>
+          <button 
+            onClick={handleSaveLog} 
+            disabled={saving}
+            className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-all disabled:opacity-50"
+          >
+            {saving ? (
+              <Loader2 size={16} className="animate-spin text-gray-500" />
+            ) : (
+              <Heart size={18} className={bookmarked ? 'fill-red-500 text-red-500 scale-110 transition-transform' : 'text-gray-600 transition-transform'}/>
+            )}
           </button>
         </div>
       </div>
@@ -213,6 +292,16 @@ export default function Results() {
       {error && (
         <div className="mx-4 mt-3 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-2 text-xs text-amber-700 font-medium">
           ⚠️ {error}
+        </div>
+      )}
+
+      {product && (product.name === 'Demo Scanned Product' || product.name === 'Scanned Food Label') && (
+        <div className="mx-4 mt-3 bg-purple-50 border border-purple-200 rounded-2xl px-4 py-3.5 text-xs text-purple-800 font-semibold flex items-start gap-2.5">
+          <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse mt-1 flex-shrink-0" />
+          <div>
+            <p className="font-bold text-purple-900 mb-0.5">Mock Demo Mode Active</p>
+            <p className="text-purple-700/90 leading-relaxed font-medium">The Google Vision OCR API Key is not configured on the server. The application has fell back to mock nutrition data for this scan preview.</p>
+          </div>
         </div>
       )}
 
@@ -312,13 +401,13 @@ export default function Results() {
                   {nd.sodium > 600 && (
                     <div className="px-4 py-3 flex justify-between border-b border-gray-50">
                       <span className="text-sm font-semibold text-gray-700">🧂 Sodium</span>
-                      <span className="text-xs font-bold text-red-500">{Math.round(nd.sodium)}mg — High</span>
+                      <span className="text-xs font-bold text-red-500">{Math.round(nd.sodium)}mg - High</span>
                     </div>
                   )}
                   {nd.sugar > 10 && (
                     <div className="px-4 py-3 flex justify-between">
                       <span className="text-sm font-semibold text-gray-700">🍭 Total Sugars</span>
-                      <span className="text-xs font-bold text-orange-500">{nd.sugar}g — High</span>
+                      <span className="text-xs font-bold text-orange-500">{nd.sugar}g - High</span>
                     </div>
                   )}
                 </div>
@@ -365,7 +454,7 @@ export default function Results() {
                     </div>
                     <div>
                       <p className="text-sm font-bold text-gray-900">
-                        {grades.customScore >= 7 ? '✅ Good match for your health profile' : grades.customScore >= 4 ? '⚠️ Okay — consume in moderation' : '❌ Not recommended for regular consumption'}
+                        {grades.customScore >= 7 ? '✅ Good match for your health profile' : grades.customScore >= 4 ? '⚠️ Okay - consume in moderation' : '❌ Not recommended for regular consumption'}
                       </p>
                       <p className="text-xs text-gray-400 mt-1">Based on your Default health mode</p>
                     </div>
@@ -428,8 +517,25 @@ export default function Results() {
 
           {/* Action buttons */}
           <div className="flex gap-3 pt-4 pb-8">
-            <button className="flex-1 bg-purple-600 text-white font-black py-4 rounded-2xl shadow-xl shadow-purple-600/20 text-sm hover:bg-purple-700 transition-colors">
-              Save to Log
+            <button 
+              onClick={handleSaveLog}
+              disabled={saving}
+              className={`flex-1 font-black py-4 rounded-2xl shadow-xl transition-all text-sm flex items-center justify-center gap-2
+                ${bookmarked || saveSuccess
+                  ? 'bg-green-600 text-white shadow-green-600/20' 
+                  : 'bg-purple-600 text-white shadow-purple-600/20 hover:bg-purple-700'
+                } disabled:opacity-50`}
+            >
+              {saving ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  Saving...
+                </>
+              ) : bookmarked || saveSuccess ? (
+                'Saved to Log! ✓'
+              ) : (
+                'Save to Log'
+              )}
             </button>
             <button onClick={() => { setReportFssai(product.fssaiNumber || ''); setShowReportModal(true); }}
               className="flex-1 bg-red-50 text-red-500 font-black py-4 rounded-2xl border border-red-100 text-sm flex items-center justify-center gap-2 hover:bg-red-100 transition-colors">

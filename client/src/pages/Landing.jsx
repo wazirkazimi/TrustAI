@@ -71,7 +71,7 @@ export default function Landing() {
             </h1>
             <p className="text-xl font-bold text-gray-700 mb-3">No Brand Influence.<br/>Pure Science.</p>
             <p className="text-gray-500 text-base mb-8 max-w-md leading-relaxed">
-              Scan any packaged food, verify FSSAI compliance, and get 4 international health grades — instantly.
+              Scan any packaged food, verify FSSAI compliance, and get 4 international health grades - instantly.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <button onClick={() => setAuthMode('register')}
@@ -147,7 +147,7 @@ export default function Landing() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-black mb-3">
-              How it works — <span className="text-purple-600">3 easy steps</span>
+              How it works - <span className="text-purple-600">3 easy steps</span>
             </h2>
             <p className="text-gray-500 max-w-lg mx-auto">Getting started with TrueBite is simple and quick. Follow these three steps to make informed, healthier choices.</p>
           </div>
@@ -159,7 +159,7 @@ export default function Landing() {
             {[
               { num:'01', title:'Scan or Search', desc:'Scan the barcode of the product or simply search its name. Works on any packaged food sold in India.', img:'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=300&q=80', align:'left' },
               { num:'02', title:'See the TrueBite Rating', desc:'TrueBite Rating is independent, unbiased, and expert-backed. Understand why the product is rated so with concerns mentioned clearly.', img:'https://images.unsplash.com/photo-1622484211148-71ee525d5022?auto=format&fit=crop&w=300&q=80', align:'right' },
-              { num:'03', title:'Discover Better Rated Products', desc:'Scroll further to find the better-rated products from the same category — healthier alternatives suggested instantly.', img:'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=300&q=80', align:'left' },
+              { num:'03', title:'Discover Better Rated Products', desc:'Scroll further to find the better-rated products from the same category - healthier alternatives suggested instantly.', img:'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=300&q=80', align:'left' },
             ].map((step, i) => (
               <motion.div key={i} initial={{opacity:0, x: step.align==='left'?-40:40}} whileInView={{opacity:1,x:0}} viewport={{once:true}} transition={{duration:0.5, delay:0.1}}
                 className={`relative flex flex-col md:flex-row items-center gap-8 mb-16 ${step.align==='right' ? 'md:flex-row-reverse' : ''}`}>
@@ -216,7 +216,7 @@ export default function Landing() {
                 </div>
                 <div>
                   <span className="font-bold text-gray-900 text-sm">{item.label}</span>
-                  <span className="text-gray-500 text-sm"> — {item.desc}</span>
+                  <span className="text-gray-500 text-sm"> - {item.desc}</span>
                 </div>
               </div>
             ))}
@@ -284,7 +284,7 @@ export default function Landing() {
             <div>
               <h3 className="text-2xl font-black mb-3">Personalized Insights For Your Health Needs</h3>
               <p className="text-purple-200 mb-5 leading-relaxed">TrueBite factors in your diet, health conditions like diabetes, weight goals, and gym needs.</p>
-              {['Personalized Flags — instantly know if a product suits you','Tailored Recommendations — find healthier alternatives','Health Modes — Diabetic, Gym, Weight Loss, Default'].map((f,i)=>(
+              {['Personalized Flags - instantly know if a product suits you','Tailored Recommendations - find healthier alternatives','Health Modes - Diabetic, Gym, Weight Loss, Default'].map((f,i)=>(
                 <div key={i} className="flex items-start gap-2 mb-2">
                   <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <Check size={11} className="text-white"/>
